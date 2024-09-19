@@ -1,78 +1,36 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, Text, Button, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, TextInput, Button, StyleSheet } from 'react-native';
 
-export default function Input({ shouldFocus }) {
-  const [text, setText] = useState('');
-  const [isFocused, setIsFocused] = useState(false);
-  const inputRef = useRef(null);
+export default function Input() {
+  const [text, setText] = useState("");
 
-  useEffect(() => {
-    if (shouldFocus) {
-      inputRef.current.focus(); // Automatically focus the TextInput
-    }
-  }, [shouldFocus]);
-
-  function handleBlur() {
-    setIsFocused(false);
-  }
-
-  function handleFocus() {
-    setIsFocused(true);
-  }
-  function handleConfirm() {
-    console.log(text);
-  }
-  function updateText() {
-    setText(changeText);
-  }
+  // Function to handle the Confirm button press
+  const handleConfirm = () => {
+    console.log(text); // Logs the current input value
+  };
 
   return (
     <View style={styles.container}>
       <TextInput
-        ref={inputRef}
-        style={{ borderBottomColor: "purple", borderBottomWidth: 2 }}
+        placeholder="Type something"
+        keyboardType="default"
+        style={styles.input}
         value={text}
-        placeholder="Type something..."
-        onChangeText={setText}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        onChangeText={setText} // Updates state with typed input
       />
-      {/* Real-time character count */}
-      {isFocused && text.length > 0 && (
-        <Text style={styles.charCount}>Character count: {text.length}</Text>
-      )}
-      
-      {/* Show message after losing focus */}
-      {!isFocused && text.length > 0 && (
-        <Text style={styles.message}>
-          {text.length >= 3 ? "Thank you" : "Please type more than 3 characters"}
-        </Text>
-      )}
-      <Button 
-        title="Confirm"  // Required prop: Button text
-        onPress={handleConfirm}  // Required prop: Event handler function
-      />
+      <Button title="Confirm" onPress={handleConfirm} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
+    margin: 20
   },
   input: {
-    borderBottomColor: 'blue',
+    borderBottomColor: "purple",
     borderBottomWidth: 2,
-    marginBottom: 10,
-    padding: 10,
-  },
-  charCount: {
-    color: 'gray',
-    marginTop: 5,
-  },
-  message: {
-    color: 'red',
-    marginTop: 5,
-  },
+    marginBottom: 10
+  }
 });
