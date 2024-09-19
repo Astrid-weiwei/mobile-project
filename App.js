@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Button, Text, StyleSheet } from 'react-native';
+import { SafeAreaView, View, Button, Text, StyleSheet } from 'react-native';
 import Input from './components/Input';
 
 export default function App() {
@@ -16,29 +16,41 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Button to open the modal */}
-      <Button title="Add a goal" onPress={() => setModalVisible(true)} />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Button title="Add a goal" onPress={() => setModalVisible(true)} />
+      </View>
       
-      {/* Display the entered text */}
-      <Text style={styles.text}>Entered Text: {enteredText}</Text>
+      <View style={styles.bottomSection}>
+        <Text style={styles.text}>Entered Text: {enteredText}</Text>
+      </View>
       
       {/* Input modal - passing the modal visibility and callback function */}
       <Input visible={modalVisible} onConfirm={handleInputData} />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
+  },
+  headerContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#f8f8f8', // Optional: Background color for header
+  },
+  bottomSection: {
+    flex: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#e0e0e0', // Background color for bottom section
     padding: 20,
   },
   text: {
     fontSize: 18,
-    marginVertical: 20,
     color: 'blue',
   },
 });
