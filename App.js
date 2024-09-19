@@ -1,48 +1,56 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TextInput, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import Header from './components/Header';
+import { SafeAreaView, View, Button, Text, StyleSheet } from 'react-native';
 import Input from './components/Input';
 
 export default function App() {
-  const appName = 'my first react native app';
+  // State to manage the modal visibility
+  const [modalVisible, setModalVisible] = useState(false);
   
-  // const [inputText, setInputText] = useState('');
-  // const handleInputChange = (text) => {
-  //   setInputText(text);
-  // };
+  // State to store the user's input
+  const [enteredText, setEnteredText] = useState('');
+
+  // Callback function to handle the text entered in the modal
+  const handleInputData = (inputText) => {
+    setEnteredText(inputText);
+    setModalVisible(false);  // Close the modal after confirming input
+  };
+
   return (
-    <View style={styles.container}>
-      <Input />
-        
-      {/* <Text>Welcome to {appName}!</Text> */}
-      <Header appName={appName} />
-
-      {/* <TextInput
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-        placeholder='Type here!'
-        onChangeText={handleInputChange}
-        value={inputText}
-      /> */}
-     {/* <Text style={styles.output}>
-        You entered: {inputText}
-      </Text> */}
-
-
-
-
-
+    <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Button title="Add a goal" onPress={() => setModalVisible(true)} />
+      </View>
       
-      <StatusBar style="auto" />
-    </View>
+      <View style={styles.bottomSection}>
+        <Text style={styles.text}>Entered Text: {enteredText}</Text>
+      </View>
+      
+      {/* Input modal - passing the modal visibility and callback function */}
+      <Input visible={modalVisible} onConfirm={handleInputData} />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  headerContainer: {
+    flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8f8f8', // Optional: Background color for header
+  },
+  bottomSection: {
+    flex: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#e0e0e0', // Background color for bottom section
+    padding: 20,
+  },
+  text: {
+    fontSize: 18,
+    color: 'blue',
   },
 });

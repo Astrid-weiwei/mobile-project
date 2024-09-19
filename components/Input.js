@@ -1,68 +1,60 @@
+import React, { useState } from 'react';
+import { View, TextInput, Button, Modal, StyleSheet } from 'react-native';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, Text, StyleSheet } from 'react-native';
+const Input = ({ visible, onConfirm }) => {
+  const [enteredText, setEnteredText] = useState('');
 
-export default function Input({ shouldFocus }) {
-  const [text, setText] = useState('');
-  const [isFocused, setIsFocused] = useState(false);
-  const inputRef = useRef(null);
-
-  useEffect(() => {
-    if (shouldFocus) {
-      inputRef.current.focus(); // Automatically focus the TextInput
-    }
-  }, [shouldFocus]);
-
-  function handleBlur() {
-    setIsFocused(false);
-  }
-
-  function handleFocus() {
-    setIsFocused(true);
-  }
+  const handleConfirm = () => {
+    onConfirm(enteredText);  // Call the callback and pass the input text
+    setEnteredText('');  // Clear the input after confirming
+  };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        ref={inputRef}
-        style={styles.input}
-        placeholder="Type something..."
-        value={text}
-        onChangeText={setText}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-      />
-      {/* Real-time character count */}
-      {isFocused && text.length > 0 && (
-        <Text style={styles.charCount}>Character count: {text.length}</Text>
-      )}
-      
-      {/* Show message after losing focus */}
-      {!isFocused && text.length > 0 && (
-        <Text style={styles.message}>
-          {text.length >= 3 ? "Thank you" : "Please type more than 3 characters"}
-        </Text>
-      )}
-    </View>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent={true}  // Makes the modal's background transparent
+    >
+      {/* Outer transparent container */}
+      <View style={styles.modalContainer}>
+        {/* Inner container with background color and rounded corners */}
+        <View style={styles.innerContainer}>
+          <TextInput
+            placeholder="Type your goal"
+            style={styles.input}
+            value={enteredText}
+            onChangeText={setEnteredText}
+          />
+          <Button title="Confirm" onPress={handleConfirm} />
+        </View>
+      </View>
+    </Modal>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 20,
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',  // Semi-transparent background
+  },
+  innerContainer: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: 'white',  // Add background color to the inner view
+    borderRadius: 10,  // Rounded corners
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,  // Shadow effect
   },
   input: {
-    borderBottomColor: 'blue',
-    borderBottomWidth: 2,
-    marginBottom: 10,
-    padding: 10,
-  },
-  charCount: {
-    color: 'gray',
-    marginTop: 5,
-  },
-  message: {
-    color: 'red',
-    marginTop: 5,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 1,
+    marginBottom: 20,
+    paddingVertical: 10,
   },
 });
+
+export default Input;
