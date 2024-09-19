@@ -1,69 +1,44 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TextInput, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import Header from './components/Header';
+import { View, Button, Text, StyleSheet } from 'react-native';
 import Input from './components/Input';
 
 export default function App() {
-  const appName = 'my first react native app';
+  // State to manage the modal visibility
+  const [modalVisible, setModalVisible] = useState(false);
   
-  const [inputText, setInputText] = useState('');
+  // State to store the user's input
+  const [enteredText, setEnteredText] = useState('');
 
-  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
-
-
-  // Function to handle data from Input component and close modal
-  const handleInputData = (text) => {
-    setInputText(text); // Update input text
-    setIsModalVisible(false); // Hide modal after user adds goal
+  // Callback function to handle the text entered in the modal
+  const handleInputData = (inputText) => {
+    setEnteredText(inputText);
+    setModalVisible(false);  // Close the modal after confirming input
   };
 
-  // const handleInputChange = (text) => {
-  //   setInputText(text);
-  // };
-//   return (
-//     <View style={styles.container}>
-//       <Input />
-        
-//       {/* <Text>Welcome to {appName}!</Text> */}
-//       <Header appName={appName} />
-
-//       {/* <TextInput
-//         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-//         placeholder='Type here!'
-//         onChangeText={handleInputChange}
-//         value={inputText}
-//       /> */}
-//      {/* <Text style={styles.output}>
-//         You entered: {inputText}
-//       </Text> */}
-
-
-
-
-
+  return (
+    <View style={styles.container}>
+      {/* Button to open the modal */}
+      <Button title="Add a goal" onPress={() => setModalVisible(true)} />
       
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
-return (
-  <View style={styles.container}>
-    
-    <Button title="Add a goal" onPress={() => setIsModalVisible(true)} />
-    
-    <Input onConfirm={handleInputData} isVisible={isModalVisible} />
-
-    <Text>{inputText ? inputText : 'No input yet'}</Text>
-  </View>
-);
+      {/* Display the entered text */}
+      <Text style={styles.text}>Entered Text: {enteredText}</Text>
+      
+      {/* Input modal - passing the modal visibility and callback function */}
+      <Input visible={modalVisible} onConfirm={handleInputData} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  text: {
+    fontSize: 18,
+    marginVertical: 20,
+    color: 'blue',
   },
 });

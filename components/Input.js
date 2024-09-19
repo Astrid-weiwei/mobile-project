@@ -1,26 +1,30 @@
-
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import { View, TextInput, Text, Button, StyleSheet, Modal } from 'react-native';
 
-export default function Input() {
-  const [text, setText] = useState("");
+export default function Input({ visible, onConfirm }) {
+  const [text, setText] = useState('');
 
-  // Function to handle the Confirm button press
   const handleConfirm = () => {
-    console.log(text); // Logs the current input value
+    onConfirm(text); // Pass input data back to the parent
   };
 
   return (
-    <Modal visible={isVisible} animationType="slide">
+    <Modal visible={visible} animationType="slide">
       <View style={styles.container}>
+        {/* TextInput with updated styling */}
         <TextInput
           placeholder="Type something"
           keyboardType="default"
-          style={{ borderBottomColor: 'purple', borderBottomWidth: 2 }}
+          style={styles.input}
           value={text}
-          onChangeText={setText} // Update text as user types
+          onChangeText={setText}
         />
-        <Button title="Confirm" onPress={handleConfirm} />
+        {/* Button wrapped in a View for styling */}
+        <View style={styles.buttonContainer}>
+          <Button title="Confirm" onPress={handleConfirm} />
+        </View>
+        {/* Text component styling */}
+        <Text style={styles.text}>Your text will appear here after you submit.</Text>
       </View>
     </Modal>
   );
@@ -28,11 +32,26 @@ export default function Input() {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
   input: {
-    borderBottomColor: "purple",
+    width: '80%',  // Input field takes 80% of the available width
+    borderBottomColor: 'purple',
     borderBottomWidth: 2,
-    marginBottom: 10
-  }
+    marginBottom: 10,
+    fontSize: 18,  // Adjust font size
+    padding: 5,  // Add some padding
+  },
+  buttonContainer: {
+    width: '30%',  // Button takes 30% of available width
+    margin: 10,  // Margin around the button
+  },
+  text: {
+    fontSize: 16,  // Adjust font size
+    color: 'grey',
+    marginTop: 10,  // Add margin to top
+  },
 });
