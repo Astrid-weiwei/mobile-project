@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Text, Button, StyleSheet } from 'react-native';
 
 export default function Input({ shouldFocus }) {
   const [text, setText] = useState('');
@@ -20,14 +20,20 @@ export default function Input({ shouldFocus }) {
   function handleFocus() {
     setIsFocused(true);
   }
+  function handleConfirm() {
+    console.log(text);
+  }
+  function updateText() {
+    setText(changeText);
+  }
 
   return (
     <View style={styles.container}>
       <TextInput
         ref={inputRef}
-        style={styles.input}
-        placeholder="Type something..."
+        style={{ borderBottomColor: "purple", borderBottomWidth: 2 }}
         value={text}
+        placeholder="Type something..."
         onChangeText={setText}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -43,6 +49,10 @@ export default function Input({ shouldFocus }) {
           {text.length >= 3 ? "Thank you" : "Please type more than 3 characters"}
         </Text>
       )}
+      <Button 
+        title="Confirm"  // Required prop: Button text
+        onPress={handleConfirm}  // Required prop: Event handler function
+      />
     </View>
   );
 }
