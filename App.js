@@ -7,35 +7,56 @@ import Input from './components/Input';
 export default function App() {
   const appName = 'my first react native app';
   
-  // const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState('');
+
+  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
+
+
+  // Function to handle data from Input component and close modal
+  const handleInputData = (text) => {
+    setInputText(text); // Update input text
+    setIsModalVisible(false); // Hide modal after user adds goal
+  };
+
   // const handleInputChange = (text) => {
   //   setInputText(text);
   // };
-  return (
-    <View style={styles.container}>
-      <Input />
+//   return (
+//     <View style={styles.container}>
+//       <Input />
         
-      {/* <Text>Welcome to {appName}!</Text> */}
-      <Header appName={appName} />
+//       {/* <Text>Welcome to {appName}!</Text> */}
+//       <Header appName={appName} />
 
-      {/* <TextInput
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-        placeholder='Type here!'
-        onChangeText={handleInputChange}
-        value={inputText}
-      /> */}
-     {/* <Text style={styles.output}>
-        You entered: {inputText}
-      </Text> */}
+//       {/* <TextInput
+//         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+//         placeholder='Type here!'
+//         onChangeText={handleInputChange}
+//         value={inputText}
+//       /> */}
+//      {/* <Text style={styles.output}>
+//         You entered: {inputText}
+//       </Text> */}
 
 
 
 
 
       
-      <StatusBar style="auto" />
-    </View>
-  );
+//       <StatusBar style="auto" />
+//     </View>
+//   );
+// }
+return (
+  <View style={styles.container}>
+    
+    <Button title="Add a goal" onPress={() => setIsModalVisible(true)} />
+    
+    <Input onConfirm={handleInputData} isVisible={isModalVisible} />
+
+    <Text>{inputText ? inputText : 'No input yet'}</Text>
+  </View>
+);
 }
 
 const styles = StyleSheet.create({

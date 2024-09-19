@@ -11,16 +11,18 @@ export default function Input() {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        placeholder="Type something"
-        keyboardType="default"
-        style={styles.input}
-        value={text}
-        onChangeText={setText} // Updates state with typed input
-      />
-      <Button title="Confirm" onPress={handleConfirm} />
-    </View>
+    <Modal visible={isVisible} animationType="slide">
+      <View style={styles.container}>
+        <TextInput
+          placeholder="Type something"
+          keyboardType="default"
+          style={{ borderBottomColor: 'purple', borderBottomWidth: 2 }}
+          value={text}
+          onChangeText={setText} // Update text as user types
+        />
+        <Button title="Confirm" onPress={handleConfirm} />
+      </View>
+    </Modal>
   );
 }
 
