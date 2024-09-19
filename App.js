@@ -1,18 +1,27 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Button, Text, StyleSheet } from 'react-native';
+import { SafeAreaView, View, Button, Text, StyleSheet, Alert } from 'react-native';
 import Input from './components/Input';
 
 export default function App() {
-  // State to manage the modal visibility
   const [modalVisible, setModalVisible] = useState(false);
-  
-  // State to store the user's input
   const [enteredText, setEnteredText] = useState('');
 
-  // Callback function to handle the text entered in the modal
+  // Callback for confirming input
   const handleInputData = (inputText) => {
     setEnteredText(inputText);
-    setModalVisible(false);  // Close the modal after confirming input
+    setModalVisible(false);
+  };
+
+  // Callback for canceling input
+  const handleCancelInput = () => {
+    Alert.alert(
+      "Cancel",
+      "Are you sure you want to cancel?",
+      [
+        { text: "No" },
+        { text: "Yes", onPress: () => setModalVisible(false) }
+      ]
+    );
   };
 
   return (
@@ -20,13 +29,17 @@ export default function App() {
       <View style={styles.headerContainer}>
         <Button title="Add a goal" onPress={() => setModalVisible(true)} />
       </View>
-      
+
       <View style={styles.bottomSection}>
         <Text style={styles.text}>Entered Text: {enteredText}</Text>
       </View>
-      
-      {/* Input modal - passing the modal visibility and callback function */}
-      <Input visible={modalVisible} onConfirm={handleInputData} />
+
+      {/* Pass the handleInputData and handleCancelInput as callbacks */}
+      <Input 
+        visible={modalVisible} 
+        onConfirm={handleInputData} 
+        onCancel={handleCancelInput}
+      />
     </SafeAreaView>
   );
 }
@@ -40,13 +53,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8f8f8', // Optional: Background color for header
+    backgroundColor: '#f8f8f8',
   },
   bottomSection: {
     flex: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#e0e0e0', // Background color for bottom section
+    backgroundColor: '#e0e0e0',
     padding: 20,
   },
   text: {
