@@ -1,66 +1,47 @@
-import React, { useState } from 'react';
-import { Modal, View, TextInput, Button, StyleSheet, Alert, Image } from 'react-native';
+import { Button, Modal, StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useState } from "react";
 
-export default function Input({ visible, onConfirm, onCancel }) {
-  const [inputText, setInputText] = useState('');
+export default function Input({ textInputFocus, inputHandler, modalVisible }) {
+  const [text, setText] = useState("");
+  const [blur, setBlur] = useState(false);
 
-  // Handler for Confirm button
-  const handleConfirm = () => {
-    onConfirm(inputText);
-    setInputText('');  // Clear input on confirm
-  };
-
-  // Handler for Cancel button
-  const handleCancel = () => {
-    Alert.alert(
-      "Cancel",
-      "Are you sure you want to cancel?",
-      [
-        { text: "No" },
-        { text: "Yes", onPress: () => {
-          onCancel();
-          setInputText('');  // Clear input on cancel
-        }}
-      ]
-    );
-  };
-
+  function updateText(changedText) {
+    setText(changedText);
+  }
+  function handleConfirm() {
+    // call the callback fn received from App.js
+    // pass what user has typed
+    inputHandler(text);
+  }
   return (
-    <Modal visible={visible} animationType="slide">
+    <Modal animationType="slide" visible={modalVisible}>
       <View style={styles.container}>
         <TextInput
+          autoFocus={textInputFocus}
+          placeholder="Type something"
+          keyboardType="default"
           style={styles.input}
-          placeholder="Enter a goal"
-          value={inputText}
-          onChangeText={setInputText}
+          value={text}
+          onChangeText={updateText}
+          onBlur={() => {
+            setBlur(true);
+          }}
+          onFocus={() => {
+            setBlur(false);
+          }}
         />
-
-        {/* Display two buttons horizontally with space between */}
+        {blur ? (
+          text.length >= 3 ? (
+            <Text>Thank you</Text>
+          ) : (
+            <Text>Please type more than 3 characters</Text>
+          )
+        ) : (
+          text && <Text>{text.length}</Text>
+        )}
         <View style={styles.buttonContainer}>
-          <Button
-            title="Cancel"
-            onPress={handleCancel}
-            style={styles.button}
-          />
-          <Button
-            title="Confirm"
-            onPress={handleConfirm}
-            disabled={inputText.length < 3} 
-            style={styles.button}
-          />
+          <Button title="Confirm" onPress={handleConfirm} />
         </View>
-
-        {/* Adding two Image components */}
-        <Image
-          style={styles.image}
-          source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2617/2617812.png' }}  // Network image
-          alt="network image"
-        />
-        <Image
-          style={styles.image}
-          source={require('../assets/local-image.png')}  // Local image
-          alt="local image"
-        />
       </View>
     </Modal>
   );
@@ -69,29 +50,18 @@ export default function Input({ visible, onConfirm, onCancel }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    backgroundColor: "#fcf",
+    alignItems: "center",
+    justifyContent: "center",
   },
   input: {
-    width: '80%',
-    borderBottomWidth: 1,
-    padding: 10,
-    marginBottom: 20,
+    borderColor: "purple",
+    borderWidth: 2,
+    padding: 5,
+    color: "blue",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '80%',
-    marginBottom: 20,
-  },
-  button: {
-    flex: 1,
-    marginHorizontal: 10,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    marginVertical: 10,
+    width: "30%",
+    marginVertical: 5,
   },
 });
