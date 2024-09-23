@@ -1,12 +1,21 @@
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
 
-const Header = ({ appName }) => {
+export default function Header({ name }) {
   return (
     <View>
-      <Text>Welcome to {appName}!</Text>
+      <Text style={styles.textStyle}>Welcome to {name}!</Text>
     </View>
   );
 }
 
-export default Header;
+const styles = StyleSheet.create({
+  textStyle: {
+    color: "purple",
+    fontSize: 25,
+    borderColor: "purple",
+    borderWidth: 2,
+    padding: 5,
+    marginBottom: 10,
+  },
+});
