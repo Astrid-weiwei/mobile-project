@@ -69,6 +69,11 @@ export default function App() {
     return null;
   };
 
+  // Separator Component for the FlatList
+  const renderSeparator = () => {
+    return <View style={styles.separator} />;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -98,6 +103,7 @@ export default function App() {
         ListEmptyComponent={renderEmptyComponent} // Component to show when the list is empty
         ListHeaderComponent={renderHeader} // Component to show when there are goals
         ListFooterComponent={renderFooter} // Component to show the footer when there are goals
+        ItemSeparatorComponent={renderSeparator} // Component to show line between items
       />
     </SafeAreaView>
   );
@@ -135,5 +141,10 @@ const styles = StyleSheet.create({
   footer: {
     marginVertical: 10,
     alignItems: 'center',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#ccc",
+    marginVertical: 5,
   },
 });
