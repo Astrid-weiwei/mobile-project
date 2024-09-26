@@ -1,18 +1,25 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Button, SafeAreaView, StyleSheet, Text, View, FlatList } from "react-native";
 import Header from "./components/Header";
-import { useState } from "react";
+import React, { useState } from "react";
 import Input from "./components/Input";
 
 export default function App() {
-  const [receivedData, setReceivedData] = useState("");
+  const [goals, setGoals] = useState([]); // State to hold the list of goals
   const [isModalVisible, setIsModalVisible] = useState(false);
   const appName = "My app";
-  //update this fn to receive data
+  
+  // Function to handle new goal input
   function handleInputData(data) {
-    //log the data to console
     console.log("App ", data);
-    setReceivedData(data);
+    // Create a new goal object with text and a unique id
+    const newGoal = {
+      text: data,
+      id: Math.random().toString(), // Generate a unique ID for the new goal
+    };
+
+    // Add the new goal to the array of goals using the spread operator
+    setGoals((prevGoals) => [...prevGoals, newGoal]);
     setIsModalVisible(false);
   }
 
@@ -33,8 +40,15 @@ export default function App() {
         inputHandler={handleInputData}
         modalVisible={isModalVisible}
       />
+      {/* Display the list of goals */}
       <View style={styles.bottomView}>
-        <Text style={styles.text}>{receivedData}</Text>
+        <FlatList
+          data={goals}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Text style={styles.text}>{item.text}</Text>
+          )}
+        />
       </View>
     </SafeAreaView>
   );
