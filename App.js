@@ -3,7 +3,7 @@ import { Button, SafeAreaView, StyleSheet, FlatList, View } from "react-native";
 import Header from "./components/Header";
 import React, { useState } from "react";
 import Input from "./components/Input";
-import GoalItem from "./components/GoalItem"; // Import GoalItem
+import GoalItem from "./components/GoalItem";
 
 export default function App() {
   const [goals, setGoals] = useState([]); // State to hold the list of goals
@@ -12,16 +12,18 @@ export default function App() {
   
   // Function to handle new goal input
   function handleInputData(data) {
-    console.log("App ", data);
-    // Create a new goal object with text and a unique id
     const newGoal = {
       text: data,
       id: Math.random().toString(), // Generate a unique ID for each goal
     };
 
-    // Add the new goal to the array of goals using the spread operator
     setGoals((prevGoals) => [...prevGoals, newGoal]);
     setIsModalVisible(false);
+  }
+
+  // Function to handle deletion of a goal
+  function handleDeleteGoal(goalId) {
+    setGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
   }
 
   return (
@@ -46,7 +48,9 @@ export default function App() {
       <FlatList
         data={goals}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <GoalItem goal={item} />} // Pass the goal object as a prop
+        renderItem={({ item }) => (
+          <GoalItem goal={item} onDelete={handleDeleteGoal} /> // Pass onDelete function to GoalItem
+        )}
         contentContainerStyle={styles.contentContainer}
       />
     </SafeAreaView>
@@ -68,4 +72,3 @@ const styles = StyleSheet.create({
     paddingBottom: 20, // Add padding at the bottom for better spacing
   },
 });
-
