@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, SafeAreaView, StyleSheet, FlatList, View } from "react-native";
+import { Button, SafeAreaView, StyleSheet, FlatList, View, Text } from "react-native";
 import Header from "./components/Header";
 import React, { useState } from "react";
 import Input from "./components/Input";
@@ -25,6 +25,11 @@ export default function App() {
   function handleDeleteGoal(goalId) {
     setGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
   }
+
+  // Component to display when the goal list is empty
+  const renderEmptyComponent = () => {
+    return <Text style={styles.emptyText}>No goals to show</Text>;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -52,6 +57,7 @@ export default function App() {
           <GoalItem goal={item} onDelete={handleDeleteGoal} /> // Pass onDelete function to GoalItem
         )}
         contentContainerStyle={styles.contentContainer}
+        ListEmptyComponent={renderEmptyComponent} // Component to show when the list is empty
       />
     </SafeAreaView>
   );
@@ -70,5 +76,13 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: 20,
     paddingBottom: 20, // Add padding at the bottom for better spacing
+    flexGrow: 1, // Make sure content is centered when empty
+    justifyContent: 'center', // Center content when the list is empty
+  },
+  emptyText: {
+    fontSize: 18,
+    color: "purple",
+    textAlign: "center",
+    marginVertical: 20,
   },
 });
