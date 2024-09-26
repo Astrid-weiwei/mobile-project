@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, SafeAreaView, StyleSheet, Text, View, FlatList } from "react-native";
+import { Button, SafeAreaView, StyleSheet, Text, View, ScrollView } from "react-native";
 import Header from "./components/Header";
 import React, { useState } from "react";
 import Input from "./components/Input";
@@ -41,17 +41,17 @@ export default function App() {
         modalVisible={isModalVisible}
       />
 
-      {/* Rendering the list using FlatList */}
-      <FlatList
-        data={goals}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.goalItem}>
-            <Text style={styles.text}>{item.text}</Text>
+      {/* Wrapping the list rendering in a ScrollView */}
+      <ScrollView 
+        style={styles.scrollView} 
+        contentContainerStyle={styles.contentContainer} // Use contentContainerStyle for layout properties
+      >
+        {goals.map((goal) => (
+          <View key={goal.id} style={styles.goalItem}>
+            <Text style={styles.text}>{goal.text}</Text>
           </View>
-        )}
-        contentContainerStyle={styles.contentContainer}
-      />
+        ))}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -77,8 +77,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
   },
+  scrollView: {
+    flex: 3, // Allow ScrollView to take up the remaining space
+    width: "100%",
+  },
   contentContainer: {
+    alignItems: "center", // Align children in the center
     paddingHorizontal: 20,
-    paddingBottom: 20, // Padding at the bottom for better scrolling experience
+    paddingBottom: 20, // Add some padding at the bottom
   },
 });
