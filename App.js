@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, SafeAreaView, StyleSheet, Text, View, ScrollView } from "react-native";
+import { Button, SafeAreaView, StyleSheet, Text, View, FlatList } from "react-native";
 import Header from "./components/Header";
 import React, { useState } from "react";
 import Input from "./components/Input";
@@ -15,7 +15,7 @@ export default function App() {
     // Create a new goal object with text and a unique id
     const newGoal = {
       text: data,
-      id: Math.random().toString(), // Generate a unique ID for the new goal
+      id: Math.random().toString(), // Generate a unique ID for each goal
     };
 
     // Add the new goal to the array of goals using the spread operator
@@ -41,17 +41,17 @@ export default function App() {
         modalVisible={isModalVisible}
       />
 
-      {/* Wrapping the list rendering in a ScrollView */}
-      <ScrollView 
-        style={styles.scrollView} 
-        contentContainerStyle={styles.contentContainer} // Use contentContainerStyle for layout properties
-      >
-        {goals.map((goal) => (
-          <View key={goal.id} style={styles.goalItem}>
-            <Text style={styles.text}>{goal.text}</Text>
+      {/* Replace ScrollView with FlatList */}
+      <FlatList
+        data={goals} // The array of goals to render
+        keyExtractor={(item) => item.id} // Provide a unique key for each item
+        renderItem={({ item }) => ( // Render each item in the list
+          <View style={styles.goalItem}>
+            <Text style={styles.text}>{item.text}</Text>
           </View>
-        ))}
-      </ScrollView>
+        )}
+        contentContainerStyle={styles.contentContainer} // Styling the content container
+      />
     </SafeAreaView>
   );
 }
@@ -77,13 +77,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
   },
-  scrollView: {
-    flex: 3, // Allow ScrollView to take up the remaining space
-    width: "100%",
-  },
   contentContainer: {
-    alignItems: "center", // Align children in the center
     paddingHorizontal: 20,
-    paddingBottom: 20, // Add some padding at the bottom
+    paddingBottom: 20, // Add padding at the bottom for better spacing
   },
 });
