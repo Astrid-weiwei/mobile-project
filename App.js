@@ -40,16 +40,18 @@ export default function App() {
         inputHandler={handleInputData}
         modalVisible={isModalVisible}
       />
-      {/* Display the list of goals */}
-      <View style={styles.bottomView}>
-        <FlatList
-          data={goals}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
+
+      {/* Rendering the list using FlatList */}
+      <FlatList
+        data={goals}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.goalItem}>
             <Text style={styles.text}>{item.text}</Text>
-          )}
-        />
-      </View>
+          </View>
+        )}
+        contentContainerStyle={styles.contentContainer}
+      />
     </SafeAreaView>
   );
 }
@@ -58,13 +60,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    // alignItems: "center",
-    justifyContent: "center",
   },
   text: {
     color: "purple",
     marginVertical: 5,
   },
-  topView: { flex: 1, alignItems: "center", justifyContent: "space-evenly" },
-  bottomView: { flex: 4, backgroundColor: "#dcd", alignItems: "center" },
+  topView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  goalItem: {
+    padding: 10,
+    marginVertical: 5,
+    backgroundColor: "#e0e0e0",
+    borderRadius: 10,
+    width: "100%",
+  },
+  contentContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 20, // Padding at the bottom for better scrolling experience
+  },
 });
