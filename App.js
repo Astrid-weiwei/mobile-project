@@ -31,6 +31,14 @@ export default function App() {
     return <Text style={styles.emptyText}>No goals to show</Text>;
   };
 
+  // Header Component for the FlatList
+  const renderHeader = () => {
+    if (goals.length > 0) {
+      return <Text style={styles.headerText}>My Goals</Text>;
+    }
+    return null;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -58,6 +66,7 @@ export default function App() {
         )}
         contentContainerStyle={styles.contentContainer}
         ListEmptyComponent={renderEmptyComponent} // Component to show when the list is empty
+        ListHeaderComponent={renderHeader} // Component to show when there are goals
       />
     </SafeAreaView>
   );
@@ -75,9 +84,16 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 20, // Add padding at the bottom for better spacing
-    flexGrow: 1, // Make sure content is centered when empty
-    justifyContent: 'center', // Center content when the list is empty
+    paddingBottom: 20,
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "purple",
+    textAlign: "center",
+    marginVertical: 10,
   },
   emptyText: {
     fontSize: 18,
