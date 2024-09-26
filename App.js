@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, SafeAreaView, StyleSheet, FlatList, View } from "react-native";
+import { Button, SafeAreaView, StyleSheet, FlatList, View, Text, Alert } from "react-native";
 import Header from "./components/Header";
 import React, { useState } from "react";
 import Input from "./components/Input";
@@ -25,6 +25,54 @@ export default function App() {
   function handleDeleteGoal(goalId) {
     setGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
   }
+
+  // Function to handle "Delete All" action
+  function handleDeleteAll() {
+    Alert.alert(
+      "Delete All Goals",
+      "Are you sure you want to delete all goals?",
+      [
+        {
+          text: "No",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => setGoals([]), // Clear all goals
+        },
+      ]
+    );
+  }
+
+  // Component to display when the goal list is empty
+  const renderEmptyComponent = () => {
+    return <Text style={styles.emptyText}>No goals to show</Text>;
+  };
+
+  // Header Component for the FlatList
+  const renderHeader = () => {
+    if (goals.length > 0) {
+      return <Text style={styles.headerText}>My Goals</Text>;
+    }
+    return null;
+  };
+
+  // Footer Component for the FlatList
+  const renderFooter = () => {
+    if (goals.length > 0) {
+      return (
+        <View style={styles.footer}>
+          <Button title="Delete All" color="blue" onPress={handleDeleteAll} />
+        </View>
+      );
+    }
+    return null;
+  };
+
+  // Separator Component for the FlatList
+  const renderSeparator = () => {
+    return <View style={styles.separator} />;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -52,6 +100,10 @@ export default function App() {
           <GoalItem goal={item} onDelete={handleDeleteGoal} /> // Pass onDelete function to GoalItem
         )}
         contentContainerStyle={styles.contentContainer}
+        ListEmptyComponent={renderEmptyComponent} // Component to show when the list is empty
+        ListHeaderComponent={renderHeader} // Component to show when there are goals
+        ListFooterComponent={renderFooter} // Component to show the footer when there are goals
+        ItemSeparatorComponent={renderSeparator} // Component to show line between items
       />
     </SafeAreaView>
   );
@@ -69,6 +121,30 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 20, // Add padding at the bottom for better spacing
+    paddingBottom: 20,
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "purple",
+    textAlign: "center",
+    marginVertical: 10,
+  },
+  emptyText: {
+    fontSize: 18,
+    color: "purple",
+    textAlign: "center",
+    marginVertical: 20,
+  },
+  footer: {
+    marginVertical: 10,
+    alignItems: 'center',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#ccc",
+    marginVertical: 5,
   },
 });
