@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
 const GoalDetails = ({ route, navigation }) => {
-  // Access the passed goal details via route.params
+  console.log(route.params);
   const { goal } = route.params;
 
   return (
