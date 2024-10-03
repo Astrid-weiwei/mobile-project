@@ -12,7 +12,7 @@ const GoalDetails = ({ route, navigation }) => {
       <Text style={styles.detailText}>Goal: {goal.text}</Text>
       <Text style={styles.detailText}>ID: {goal.id}</Text>
       
-      {/*write a button trigger function here*/}
+      {/* More Details Button */}
       <Button
         title="More Details"
         onPress={() => navigation.navigate('Details', { goal })}
