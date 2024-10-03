@@ -32,7 +32,6 @@ export default function Home({ navigation }) {
     setGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
   }
 
-
   const renderEmptyComponent = () => {
     return <Text style={styles.emptyText}>No goals to show</Text>;
   };
