@@ -12,7 +12,6 @@ const GoalDetails = ({ route, navigation }) => {
       <Text style={styles.detailText}>Goal: {goal.text}</Text>
       <Text style={styles.detailText}>ID: {goal.id}</Text>
       
-      {/* More Details Button */}
       {/*write a button trigger function here*/}
       <Button
         title="More Details"
