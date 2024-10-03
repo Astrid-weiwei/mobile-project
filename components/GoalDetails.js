@@ -1,7 +1,9 @@
+// components/GoalDetails.js
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 
-const GoalDetails = ({ route }) => {
+const GoalDetails = ({ route, navigation }) => {
+  // Access the passed goal details via route.params
   const { goal } = route.params;
 
   return (
@@ -9,6 +11,13 @@ const GoalDetails = ({ route }) => {
       <Text style={styles.title}>Goal Details</Text>
       <Text style={styles.detailText}>Goal: {goal.text}</Text>
       <Text style={styles.detailText}>ID: {goal.id}</Text>
+      
+      {/* More Details Button */}
+      {/*write a button trigger function here*/}
+      <Button
+        title="More Details"
+        onPress={() => navigation.navigate('Details', { goal })}
+      />
     </View>
   );
 };

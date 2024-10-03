@@ -1,3 +1,4 @@
+// components/Home.js
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -14,24 +15,27 @@ import Input from "./Input";
 import GoalItem from "./GoalItem";
 
 export default function Home({ navigation }) {
-  const [goals, setGoals] = useState([]); 
+  const [goals, setGoals] = useState([]); // State to hold the list of goals
   const [isModalVisible, setIsModalVisible] = useState(false);
   const appName = "My app";
 
+  // Function to handle new goal input
   function handleInputData(data) {
     const newGoal = {
       text: data,
-      id: Math.random().toString(), 
+      id: Math.random().toString(), // Generate a unique ID for each goal
     };
 
     setGoals((prevGoals) => [...prevGoals, newGoal]);
     setIsModalVisible(false);
   }
 
+  // Function to handle deletion of a goal
   function handleDeleteGoal(goalId) {
     setGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
   }
 
+  // Component to display when the goal list is empty
   const renderEmptyComponent = () => {
     return <Text style={styles.emptyText}>No goals to show</Text>;
   };
@@ -54,6 +58,7 @@ export default function Home({ navigation }) {
         modalVisible={isModalVisible}
       />
 
+      {/* Use FlatList to render GoalItem components */}
       <FlatList
         data={goals}
         keyExtractor={(item) => item.id}
