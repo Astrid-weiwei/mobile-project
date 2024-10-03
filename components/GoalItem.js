@@ -1,13 +1,19 @@
 // components/GoalItem.js
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const GoalItem = ({ goal, onDelete }) => {
+  const navigation = useNavigation(); // Hook to access the navigation object
+
   return (
     <View style={styles.goalItem}>
       <Text style={styles.text}>{goal.text}</Text>
       <TouchableOpacity onPress={() => onDelete(goal.id)}>
         <Text style={styles.deleteButton}>X</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Details', { goal })}>
+        <Text style={styles.infoButton}>i</Text>
       </TouchableOpacity>
     </View>
   );
@@ -20,8 +26,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
     borderRadius: 10,
     width: "100%",
-    flexDirection: 'row', // Arrange items in a row
-    justifyContent: 'space-between', // Space between text and button
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   text: {
@@ -31,6 +37,12 @@ const styles = StyleSheet.create({
     color: "red",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  infoButton: {
+    color: "blue",
+    fontWeight: "bold",
+    fontSize: 16,
+    marginLeft: 10,
   },
 });
 
