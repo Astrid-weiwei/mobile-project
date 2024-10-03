@@ -1,22 +1,29 @@
-// components/GoalDetails.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
 const GoalDetails = ({ route, navigation }) => {
-  console.log(route.params);
   const { goal } = route.params;
+  const [textColor, setTextColor] = useState('black');
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button 
+          title="Warning!" 
+          color="red" 
+          onPress={() => {
+            setTextColor('red'); // Change text color to red
+            navigation.setOptions({ title: 'Warning!' }); // Change header title
+          }} 
+        />
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Goal Details</Text>
-      <Text style={styles.detailText}>Goal: {goal.text}</Text>
-      <Text style={styles.detailText}>ID: {goal.id}</Text>
-      
-      {/* More Details Button */}
-      <Button
-        title="More Details"
-        onPress={() => navigation.navigate('Details', { goal })}
-      />
+      <Text style={[styles.detailText, { color: textColor }]}>Goal: {goal.text}</Text>
+      <Text style={[styles.detailText, { color: textColor }]}>ID: {goal.id}</Text>
     </View>
   );
 };
@@ -27,11 +34,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f9f9f9',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
   },
   detailText: {
     fontSize: 18,
