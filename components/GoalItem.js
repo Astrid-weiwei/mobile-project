@@ -1,10 +1,9 @@
-// components/GoalItem.js
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'; // Import the hook
 
 const GoalItem = ({ goal, onDelete }) => {
-  const navigation = useNavigation(); // Hook to access the navigation object
+  const navigation = useNavigation(); // Get access to the navigation prop
 
   return (
     <View style={styles.goalItem}>
@@ -40,7 +39,6 @@ const styles = StyleSheet.create({
   },
   infoButton: {
     color: "blue",
-    fontWeight: "bold",
     fontSize: 16,
     marginLeft: 10,
   },
