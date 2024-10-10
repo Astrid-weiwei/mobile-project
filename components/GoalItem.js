@@ -1,47 +1,55 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import the hook
+import { StyleSheet, Text, View, Pressable } from "react-native";
+import { Ionicons } from "@expo/vector-icons";  // Import the icon library
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
 
-const GoalItem = ({ goal, onDelete }) => {
-  const navigation = useNavigation(); // Get access to the navigation prop
+export default function GoalItem({ goalObj, handleDelete }) {
+  const navigation = useNavigation();
 
   return (
-    <View style={styles.goalItem}>
-      <Text style={styles.text}>{goal.text}</Text>
-      <TouchableOpacity onPress={() => onDelete(goal.id)}>
-        <Text style={styles.deleteButton}>X</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Details', { goal })}>
-        <Text style={styles.infoButton}>i</Text>
-      </TouchableOpacity>
+    <View style={styles.textContainer}>
+      <Text style={styles.text}>{goalObj.text}</Text>
+      <Pressable
+        onPress={() => {
+          handleDelete(goalObj.id);
+        }}
+        android_ripple={{ color: "#ddd" }} // Visual feedback for Android
+        style={({ pressed }) => [
+          {
+            opacity: pressed ? 0.5 : 1,  // Visual feedback for iOS
+          },
+        ]}
+      >
+        <Ionicons name="trash-outline" size={24} color="black" />
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          navigation.navigate("Details", { goalObj });
+        }}
+        android_ripple={{ color: "#ddd" }} // Visual feedback for Android
+        style={({ pressed }) => [
+          {
+            opacity: pressed ? 0.5 : 1,  // Visual feedback for iOS
+          },
+        ]}
+      >
+        <Ionicons name="information-circle-outline" size={24} color="black" />
+      </Pressable>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  goalItem: {
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: "#e0e0e0",
-    borderRadius: 10,
-    width: "100%",
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   text: {
     color: "purple",
+    fontSize: 35,
+    padding: 5,
   },
-  deleteButton: {
-    color: "red",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  infoButton: {
-    color: "blue",
-    fontSize: 16,
-    marginLeft: 10,
+  textContainer: {
+    backgroundColor: "#aaa",
+    borderRadius: 5,
+    marginVertical: 5,
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
-
-export default GoalItem;
