@@ -1,14 +1,13 @@
-import { View, FlatList, SafeAreaView, Text, Alert, StyleSheet } from "react-native";
+import { SafeAreaView, FlatList, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import Header from "./Header";
 import Input from "./Input";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton"; // Import reusable button
 
-export default function Home({ navigation }) {
+export default function Home() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [goals, setGoals] = useState([]);
-  const appName = "My app";
 
   function handleInputData(data) {
     let newGoal = { text: data, id: Math.random() };
@@ -23,12 +22,9 @@ export default function Home({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topView}>
-        <Header name={appName} />
-        {/* Replace the button for adding a goal with PressableButton */}
-        <PressableButton
-          title="Add a Goal"
-          onPress={() => setIsModalVisible(true)}
-        />
+        <Header name="My app" />
+        {/* Replace the "Add a Goal" button */}
+        <PressableButton title="Add a Goal" onPress={() => setIsModalVisible(true)} />
       </View>
       <Input
         textInputFocus={true}
@@ -41,6 +37,7 @@ export default function Home({ navigation }) {
         renderItem={({ item }) => (
           <GoalItem goalObj={item} handleDelete={goalDeleteHandler} />
         )}
+        keyExtractor={(item) => item.id.toString()}
       />
     </SafeAreaView>
   );
@@ -51,5 +48,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  topView: { flex: 1, alignItems: "center", justifyContent: "space-evenly" },
+  topView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
 });

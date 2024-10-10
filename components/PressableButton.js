@@ -5,13 +5,10 @@ export default function PressableButton({ title, onPress }) {
   return (
     <Pressable
       onPress={onPress}
-      android_ripple={{ color: "lightgrey" }}
+      android_ripple={{ color: "lightgrey" }} // Ripple effect for Android
       style={({ pressed }) => [
-        {
-          backgroundColor: pressed ? "#ddd" : "#ccc", // Visual feedback
-          opacity: pressed ? 0.5 : 1,
-        },
         styles.buttonContainer,
+        { backgroundColor: pressed ? "#ddd" : "#ccc", opacity: pressed ? 0.7 : 1 }, // Feedback for iOS
       ]}
     >
       <Text style={styles.buttonText}>{title}</Text>
@@ -22,12 +19,13 @@ export default function PressableButton({ title, onPress }) {
 const styles = StyleSheet.create({
   buttonContainer: {
     padding: 10,
-    marginVertical: 5,
     borderRadius: 5,
+    marginVertical: 5,
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
     color: "white",
-    textAlign: "center",
     fontSize: 16,
   },
 });
