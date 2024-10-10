@@ -1,44 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { Button, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 
-const GoalDetails = ({ route, navigation }) => {
-  const { goal } = route.params;
-  const [textColor, setTextColor] = useState('black');
-
+export default function GoalDetails({ navigation, route }) {
+  const [warning, setWarning] = useState(false);
+  function warningHandler() {
+    setWarning(true);
+    navigation.setOptions({ title: "Warning!" });
+  }
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <Button 
-          title="Warning!" 
-          color="red" 
-          onPress={() => {
-            setTextColor('red'); // Change text color to red
-            navigation.setOptions({ title: 'Warning!' }); // Change header title
-          }} 
-        />
-      ),
+      headerRight: () => {
+        return (
+          <Button title="Warning" color="white" onPress={warningHandler} />
+        );
+      },
     });
-  }, [navigation]);
-
+  }, []);
   return (
-    <View style={styles.container}>
-      <Text style={[styles.detailText, { color: textColor }]}>Goal: {goal.text}</Text>
-      <Text style={[styles.detailText, { color: textColor }]}>ID: {goal.id}</Text>
+    <View>
+      {route.params ? (
+        <Text style={warning && styles.warningStyle}>
+          Details of {route.params.goalObj.text} goal with
+          {route.params.goalObj.id}
+        </Text>
+      ) : (
+        <Text>More Details</Text>
+      )}
+      <Button
+        title="More Details"
+        onPress={() => {
+          navigation.push("Details");
+        }}
+      />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f9f9f9',
-  },
-  detailText: {
-    fontSize: 18,
-    marginVertical: 10,
+  warningStyle: {
+    color: "red",
   },
 });
-
-export default GoalDetails;

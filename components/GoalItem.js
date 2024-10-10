@@ -1,47 +1,43 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import the hook
+import { Button, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
 
-const GoalItem = ({ goal, onDelete }) => {
-  const navigation = useNavigation(); // Get access to the navigation prop
+export default function GoalItem({ goalObj, handleDelete }) {
+  const navigation = useNavigation();
 
   return (
-    <View style={styles.goalItem}>
-      <Text style={styles.text}>{goal.text}</Text>
-      <TouchableOpacity onPress={() => onDelete(goal.id)}>
-        <Text style={styles.deleteButton}>X</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Details', { goal })}>
-        <Text style={styles.infoButton}>i</Text>
-      </TouchableOpacity>
+    <View style={styles.textContainer}>
+      <Text style={styles.text}>{goalObj.text}</Text>
+      <Button
+        title="X"
+        onPress={() => {
+          handleDelete(goalObj.id);
+        }}
+        color="grey"
+      />
+      <Button
+        title="i"
+        onPress={() => {
+          // handlePress(goalObj);
+          navigation.navigate("Details", { goalObj });
+        }}
+        color="grey"
+      />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  goalItem: {
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: "#e0e0e0",
-    borderRadius: 10,
-    width: "100%",
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   text: {
     color: "purple",
+    fontSize: 35,
+    padding: 5,
   },
-  deleteButton: {
-    color: "red",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  infoButton: {
-    color: "blue",
-    fontSize: 16,
-    marginLeft: 10,
+  textContainer: {
+    backgroundColor: "#aaa",
+    borderRadius: 5,
+    marginVertical: 5,
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
-
-export default GoalItem;
