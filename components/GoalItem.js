@@ -4,10 +4,10 @@ import { useNavigation } from "@react-navigation/native";
 import PressableButton from "./PressableButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-export default function GoalItem({ goalObj, handleDelete }) {
+export default function GoalItem({ goalObj, handleDelete, onPressIn, onPressOut }) {
   const navigation = useNavigation();
 
-  // Function to handle long press and show the delete confirmation
+  // Function to handle long press and show delete confirmation
   function handleLongPress() {
     Alert.alert(
       "Delete Goal",
@@ -30,19 +30,15 @@ export default function GoalItem({ goalObj, handleDelete }) {
     <View style={styles.textContainer}>
       <Pressable
         android_ripple={{ color: "white", radius: 20 }}
-        style={({ pressed }) => {
-          return [styles.horizontalContainer, pressed && styles.pressedStyle];
-        }}
-        onPress={() => {
-          navigation.navigate("Details", { goalObj });
-        }}
+        style={({ pressed }) => [styles.horizontalContainer, pressed && styles.pressedStyle]}
+        onPress={() => navigation.navigate("Details", { goalObj })}
         onLongPress={handleLongPress} // Handle long press to delete
+        onPressIn={onPressIn}  // Highlight separator on press
+        onPressOut={onPressOut}  // Unhighlight separator on release
       >
         <Text style={styles.text}>{goalObj.text}</Text>
         <PressableButton
-          pressedFunction={() => {
-            handleDelete(goalObj.id);
-          }}
+          pressedFunction={() => handleDelete(goalObj.id)}
           componentStyle={styles.deleteContainer}
           pressedStyle={styles.pressedStyle}
         >
