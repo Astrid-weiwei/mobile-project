@@ -1,39 +1,49 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";  // Import the icon library
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import PressableButton from "./PressableButton";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
-export default function GoalItem({ goalObj, handleDelete }) {
+export default function GoalItem({ goalObj, handleDelete, onPressIn, onPressOut }) {
   const navigation = useNavigation();
+
+  // Function to handle long press and show delete confirmation
+  function handleLongPress() {
+    Alert.alert(
+      "Delete Goal",
+      `Are you sure you want to delete "${goalObj.text}"?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: () => handleDelete(goalObj.id),
+          style: "destructive",
+        },
+      ]
+    );
+  }
 
   return (
     <View style={styles.textContainer}>
-      <Text style={styles.text}>{goalObj.text}</Text>
       <Pressable
-        onPress={() => {
-          handleDelete(goalObj.id);
-        }}
-        android_ripple={{ color: "#ddd" }} // Visual feedback for Android
-        style={({ pressed }) => [
-          {
-            opacity: pressed ? 0.5 : 1,  // Visual feedback for iOS
-          },
-        ]}
+        android_ripple={{ color: "white", radius: 20 }}
+        style={({ pressed }) => [styles.horizontalContainer, pressed && styles.pressedStyle]}
+        onPress={() => navigation.navigate("Details", { goalObj })}
+        onLongPress={handleLongPress} // Handle long press to delete
+        onPressIn={onPressIn}  // Highlight separator on press
+        onPressOut={onPressOut}  // Unhighlight separator on release
       >
-        <Ionicons name="trash-outline" size={24} color="black" />
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          navigation.navigate("Details", { goalObj });
-        }}
-        android_ripple={{ color: "#ddd" }} // Visual feedback for Android
-        style={({ pressed }) => [
-          {
-            opacity: pressed ? 0.5 : 1,  // Visual feedback for iOS
-          },
-        ]}
-      >
-        <Ionicons name="information-circle-outline" size={24} color="black" />
+        <Text style={styles.text}>{goalObj.text}</Text>
+        <PressableButton
+          pressedFunction={() => handleDelete(goalObj.id)}
+          componentStyle={styles.deleteContainer}
+          pressedStyle={styles.pressedStyle}
+        >
+          <AntDesign name="delete" size={24} color="white" />
+        </PressableButton>
       </Pressable>
     </View>
   );
@@ -46,10 +56,21 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   textContainer: {
-    backgroundColor: "#aaa",
     borderRadius: 5,
     marginVertical: 5,
     flexDirection: "row",
     alignItems: "center",
+  },
+  horizontalContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#aaa",
+  },
+  pressedStyle: {
+    backgroundColor: "red",
+    opacity: 0.5,
+  },
+  deleteContainer: {
+    backgroundColor: "grey",
   },
 });
