@@ -1,31 +1,37 @@
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Pressable, Text, StyleSheet } from "react-native";
 
-export default function PressableButton({ title, onPress }) {
+export default function PressableButton({
+  children,
+  pressedFunction,
+  componentStyle,
+  pressedStyle,
+}) {
   return (
     <Pressable
-      onPress={onPress}
-      android_ripple={{ color: "lightgrey" }} // Ripple effect for Android
-      style={({ pressed }) => [
-        styles.buttonContainer,
-        { backgroundColor: pressed ? "#ddd" : "#ccc", opacity: pressed ? 0.7 : 1 }, // Feedback for iOS
-      ]}
+      onPress={pressedFunction}
+      style={({ pressed }) => {
+        return [
+          styles.defaultStyle,
+          componentStyle,
+          pressed && styles.defaultPressedStyle,
+          pressed && pressedStyle,
+        ];
+      }}
     >
-      <Text style={styles.buttonText}>{title}</Text>
+      <View>{children}</View>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    padding: 10,
+  defaultStyle: {
+    backgroundColor: "beige",
+    // padding: 5,
     borderRadius: 5,
-    marginVertical: 5,
-    alignItems: "center",
-    justifyContent: "center",
   },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
+  defaultPressedStyle: {
+    backgroundColor: "#a4a",
+    opacity: 0.2,
   },
 });

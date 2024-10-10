@@ -1,39 +1,49 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";  // Import the icon library
+import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-
+import PressableButton from "./PressableButton";
+import AntDesign from "@expo/vector-icons/AntDesign";
 export default function GoalItem({ goalObj, handleDelete }) {
   const navigation = useNavigation();
 
   return (
     <View style={styles.textContainer}>
-      <Text style={styles.text}>{goalObj.text}</Text>
       <Pressable
-        onPress={() => {
-          handleDelete(goalObj.id);
+        android_ripple={{ color: "white", radius: 20 }}
+        style={({ pressed }) => {
+          return [styles.horizontalContainer, pressed && styles.pressedStyle];
         }}
-        android_ripple={{ color: "#ddd" }} // Visual feedback for Android
-        style={({ pressed }) => [
-          {
-            opacity: pressed ? 0.5 : 1,  // Visual feedback for iOS
-          },
-        ]}
-      >
-        <Ionicons name="trash-outline" size={24} color="black" />
-      </Pressable>
-      <Pressable
         onPress={() => {
+          // handlePress(goalObj);
           navigation.navigate("Details", { goalObj });
         }}
-        android_ripple={{ color: "#ddd" }} // Visual feedback for Android
-        style={({ pressed }) => [
-          {
-            opacity: pressed ? 0.5 : 1,  // Visual feedback for iOS
-          },
-        ]}
       >
-        <Ionicons name="information-circle-outline" size={24} color="black" />
+        <Text style={styles.text}>{goalObj.text}</Text>
+        <PressableButton
+          pressedFunction={() => {
+            handleDelete(goalObj.id);
+          }}
+          componentStyle={styles.deleteContainer}
+          pressedStyle={styles.pressedStyle}
+        >
+          {/* <Text style={styles.deleteButton}>X</Text> */}
+          <AntDesign name="delete" size={24} color="white" />
+        </PressableButton>
+        {/* <Button
+          title="X"
+          onPress={() => {
+            handleDelete(goalObj.id);
+          }}
+          color="grey"
+        /> */}
+        {/* <Button
+        title="i"
+        onPress={() => {
+          // handlePress(goalObj);
+          navigation.navigate("Details", { goalObj });
+        }}
+        color="grey"
+      /> */}
       </Pressable>
     </View>
   );
@@ -46,10 +56,25 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   textContainer: {
-    backgroundColor: "#aaa",
     borderRadius: 5,
     marginVertical: 5,
     flexDirection: "row",
     alignItems: "center",
+  },
+  horizontalContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#aaa",
+  },
+  pressedStyle: {
+    backgroundColor: "red",
+    opacity: 0.5,
+  },
+  deleteButton: {
+    fontSize: 20,
+    color: "white",
+  },
+  deleteContainer: {
+    backgroundColor: "grey",
   },
 });
