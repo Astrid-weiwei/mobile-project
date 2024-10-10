@@ -10,6 +10,7 @@ export default function GoalItem({ goalObj, handleDelete }) {
       onPress={() => {
         navigation.navigate("Details", { goalObj });
       }}
+      android_ripple={{ color: 'lightgrey', radius: 200 }}  // Adding android ripple effect
       style={({ pressed }) => [
         {
           backgroundColor: pressed ? '#ddd' : '#aaa',
