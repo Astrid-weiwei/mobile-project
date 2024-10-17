@@ -25,9 +25,14 @@ export default function Home({ navigation }) {
   const collectionName = "goals";
   useEffect(() => {
     onSnapshot(collection(database, collectionName), (querySnapshot) => {
+      let newArray = [];
       querySnapshot.forEach((docSnapshot) => {
+        newArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
         console.log(docSnapshot.data());
       });
+      //setGoals with this array
+      setGoals(newArray);
+
     });
   }, []);
 
