@@ -4,8 +4,15 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import PressableButton from "./PressableButton";
 export default function GoalDetails({ navigation, route }) {
   const [warning, setWarning] = useState(false);
+  const { goalObj } = route.params;
+  // function warningHandler() {
+  //   setWarning(true);
+  //   navigation.setOptions({ title: "Warning!" });
+  // }
   function warningHandler() {
     setWarning(true);
+    // Update the Firestore document to add the warning field
+    updateGoalWarning(goalObj.id, "goals");
     navigation.setOptions({ title: "Warning!" });
   }
   useEffect(() => {
