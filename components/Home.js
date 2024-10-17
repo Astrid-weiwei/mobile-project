@@ -13,28 +13,38 @@ import { useState } from "react";
 import Input from "./Input";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
+import { writeToDB } from "../Firebase/firestoreHelper"
+import { collection } from "firebase/firestore";
 
 export default function Home({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [goals, setGoals] = useState([]);
   const appName = "My app";
+
   //update this fn to receive data
-  function handleInputData(data) {
+  async function handleInputData(data) {
     //log the data to console
     console.log("App ", data);
     // declare a JS object
-    let newGoal = { text: data, id: Math.random() };
+    let newGoal = { text: data };
     // update the goals array to have newGoal as an item
+    
+    const docRef = writeToDB(newGoal, collection);
+    console.log(docRef);
+
     //async
     setGoals((prevGoals) => {
-      return [...prevGoals, newGoal];
+      return [...prevGoals, { ...newGoal, id: Math.random().toString() }];
     });
     //updated goals is not accessible here
     setIsModalVisible(false);
   }
+
   function dismissModal() {
     setIsModalVisible(false);
   }
+
+
 
   // function goalPressHandler(pressedGoal) {
   //   //which goal?
