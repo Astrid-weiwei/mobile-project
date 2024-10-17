@@ -13,40 +13,58 @@ import { useEffect, useState } from "react";
 import Input from "./Input";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
-import { writeToDB } from "../Firebase/firestoreHelper"
-import { collection } from "../Firebase/firestoreHelper"
-import { onSnapshot } from "firebase/firestore";
+import { database } from "../Firebase/firebaseSetup";
+import {
+  deleteAllFromDB,
+  deleteFromDB,
+  writeToDB,
+} from "../Firebase/firestoreHelper";
+import { collection, onSnapshot } from "firebase/firestore";
 
 export default function Home({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [goals, setGoals] = useState([]);
   const appName = "My app";
-
   const collectionName = "goals";
+  // useEffect(() => {
+  //   //querySnapshot is a list/array of documentSnapshots
+  //   onSnapshot(collection(database, collectionName), (querySnapshot) => {
+  //     //define an array
+  //     let newArray = [];
+  //     querySnapshot.forEach((docSnapshot) => {
+  //       //populate the array
+  //       newArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
+  //       console.log(docSnapshot.id);
+  //     });
+  //     console.log(newArray);
+  //     //setGoals with this array
+  //     setGoals(newArray);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    onSnapshot(collection(database, collectionName), (querySnapshot) => {
+    const unsubscribe = onSnapshot(collection(database, collectionName), (querySnapshot) => {
       let newArray = [];
       querySnapshot.forEach((docSnapshot) => {
         newArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
-        console.log(docSnapshot.data());
       });
-      //setGoals with this array
       setGoals(newArray);
-
     });
+  
+    // Detach the listener when the component is unmounted
+    return () => unsubscribe();
   }, []);
-
   //update this fn to receive data
-  async function handleInputData(data) {
+  function handleInputData(data) {
     //log the data to console
     console.log("App ", data);
     // declare a JS object
     let newGoal = { text: data };
-    // update the goals array to have newGoal as an item
-    
-    const docRef = writeToDB(newGoal, collection);
-    console.log(docRef);
+    // add the newGoal to db
+    //call writeToDB
+    writeToDB(newGoal, collectionName);
 
+    // update the goals array to have newGoal as an item
     //async
 
     // setGoals((prevGoals) => {
@@ -55,12 +73,9 @@ export default function Home({ navigation }) {
     //updated goals is not accessible here
     setIsModalVisible(false);
   }
-
   function dismissModal() {
     setIsModalVisible(false);
   }
-
-
 
   // function goalPressHandler(pressedGoal) {
   //   //which goal?
@@ -71,18 +86,18 @@ export default function Home({ navigation }) {
     console.log("goal deleted ", deletedId);
     //Use array.filter to update the array by removing the deletedId
     deleteFromDB(deletedId, collectionName);
-    setGoals((prevGoals) => {
-      return prevGoals.filter((goal) => {
-        return goal.id != deletedId;
-      });
-    });
+    // setGoals((prevGoals) => {
+    //   return prevGoals.filter((goal) => {
+    //     return goal.id != deletedId;
+    //   });
+    // });
   }
   function deleteAll() {
     Alert.alert("Delete All", "Are you sure you want to delete all goals?", [
       {
         text: "Yes",
         onPress: () => {
-          //setGoals([]);
+          // setGoals([]);
           deleteAllFromDB(collectionName);
         },
       },
