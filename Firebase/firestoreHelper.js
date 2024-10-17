@@ -25,8 +25,8 @@ export async function deleteFromDB(id, collectionName) {
   export async function deleteAllFromDB(collectionName) {
     try { 
      const querySnapshot = await getDocs(collection(database, collectionName));
-     querySnapshot.forEach((doc) => {
-        deleteFromDB(doc.id, collectionName)
+     querySnapshot.forEach((docSnapshot) => {
+        deleteFromDB(docSnapshot.id, collectionName)
      });
   
     }

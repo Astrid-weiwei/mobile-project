@@ -82,7 +82,8 @@ export default function Home({ navigation }) {
       {
         text: "Yes",
         onPress: () => {
-          setGoals([]);
+          //setGoals([]);
+          deleteAllFromDB(collectionName);
         },
       },
       { text: "No", style: "cancel" },
