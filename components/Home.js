@@ -9,17 +9,27 @@ import {
   View,
 } from "react-native";
 import Header from "./Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "./Input";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
 import { writeToDB } from "../Firebase/firestoreHelper"
-import { collection } from "firebase/firestore";
+import { collection } from "../Firebase/firestoreHelper"
+import { onSnapshot } from "firebase/firestore";
 
 export default function Home({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [goals, setGoals] = useState([]);
   const appName = "My app";
+
+  const collectionName = "goals";
+  useEffect(() => {
+    onSnapshot(collection(database, collectionName), (querySnapshot) => {
+      querySnapshot.forEach((docSnapshot) => {
+        console.log(docSnapshot.data());
+      });
+    });
+  }, []);
 
   //update this fn to receive data
   async function handleInputData(data) {
@@ -33,9 +43,10 @@ export default function Home({ navigation }) {
     console.log(docRef);
 
     //async
-    setGoals((prevGoals) => {
-      return [...prevGoals, { ...newGoal, id: Math.random().toString() }];
-    });
+
+    // setGoals((prevGoals) => {
+    //   return [...prevGoals, newGoal];
+    // });
     //updated goals is not accessible here
     setIsModalVisible(false);
   }
