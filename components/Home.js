@@ -70,7 +70,7 @@ export default function Home({ navigation }) {
   function goalDeleteHandler(deletedId) {
     console.log("goal deleted ", deletedId);
     //Use array.filter to update the array by removing the deletedId
-
+    deleteFromDB(deletedId, collectionName);
     setGoals((prevGoals) => {
       return prevGoals.filter((goal) => {
         return goal.id != deletedId;
