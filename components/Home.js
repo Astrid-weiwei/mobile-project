@@ -26,32 +26,23 @@ export default function Home({ navigation }) {
   const [goals, setGoals] = useState([]);
   const appName = "My app";
   const collectionName = "goals";
-  // useEffect(() => {
-  //   //querySnapshot is a list/array of documentSnapshots
-  //   onSnapshot(collection(database, collectionName), (querySnapshot) => {
-  //     //define an array
-  //     let newArray = [];
-  //     querySnapshot.forEach((docSnapshot) => {
-  //       //populate the array
-  //       newArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
-  //       console.log(docSnapshot.id);
-  //     });
-  //     console.log(newArray);
-  //     //setGoals with this array
-  //     setGoals(newArray);
-  //   });
-  // }, []);
-
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(database, collectionName), (querySnapshot) => {
-      let newArray = [];
-      querySnapshot.forEach((docSnapshot) => {
-        newArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
-      });
-      setGoals(newArray);
-    });
-  
-    // Detach the listener when the component is unmounted
+    //querySnapshot is a list/array of documentSnapshots
+    const unsubscribe = onSnapshot(
+      collection(database, collectionName),
+      (querySnapshot) => {
+        //define an array
+        let newArray = [];
+        querySnapshot.forEach((docSnapshot) => {
+          //populate the array
+          newArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
+          console.log(docSnapshot.id);
+        });
+        console.log(newArray);
+        //setGoals with this array
+        setGoals(newArray);
+      }
+    );
     return () => unsubscribe();
   }, []);
   //update this fn to receive data

@@ -4,15 +4,26 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore } from "firebase/firestore";
 
-// Your web app's Firebase configuration
+// // Your web app's Firebase configuration
+// const firebaseConfig = {
+//   apiKey: process.env.EXPO_PUBLIC_apiKey,
+//   authDomain: process.env.EXPO_PUBLIC_authDomain,
+//   projectId: process.env.EXPO_PUBLIC_projectId,
+//   storageBucket: process.env.EXPO_PUBLIC_storageBucket,
+//   messagingSenderId: process.env.EXPO_PUBLIC_messagingSenderId,
+//   appId: process.env.EXPO_PUBLIC_appId,
+// };
+
 const firebaseConfig = {
-  apiKey: process.env.EXPO_PUBLIC_apiKey,
-  authDomain: process.env.EXPO_PUBLIC_authDomain,
-  projectId: process.env.EXPO_PUBLIC_projectId,
-  storageBucket: process.env.EXPO_PUBLIC_storageBucket,
-  messagingSenderId: process.env.EXPO_PUBLIC_messagingSenderId,
-  appId: process.env.EXPO_PUBLIC_appId,
+  apiKey: "AIzaSyAAmkzlG0zsC3LnqEnsrDXx4AWvFZ7K-jE",
+  authDomain: "mobile-da348.firebaseapp.com",
+  projectId: "mobile-da348",
+  storageBucket: "mobile-da348.appspot.com",
+  messagingSenderId: "243300888073",
+  appId: "1:243300888073:web:7595544d19951fd4f452d8",
+  measurementId: "G-MYL7YHLDP0"
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

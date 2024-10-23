@@ -4,6 +4,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  setDoc,
 } from "firebase/firestore";
 import { database } from "./firebaseSetup";
 
@@ -23,6 +24,13 @@ export async function deleteFromDB(deleteId, collectionName) {
     console.log("delete from db ", err);
   }
 }
+export async function updateDB(id, data, collectionName) {
+  try {
+    await setDoc(doc(database, collectionName, id), data, { merge: true });
+  } catch (err) {
+    console.log("update DB ", err);
+  }
+}
 
 export async function deleteAllFromDB(collectionName) {
   try {
@@ -32,15 +40,5 @@ export async function deleteAllFromDB(collectionName) {
     });
   } catch (err) {
     console.log("delete all", err);
-  }
-}
-
-// Function to update warning field
-export async function updateGoalWarning(id, collectionName) {
-  try {
-    const goalRef = doc(database, collectionName, id);
-    await updateDoc(goalRef, { warning: true });
-  } catch (err) {
-    console.log(err);
   }
 }
