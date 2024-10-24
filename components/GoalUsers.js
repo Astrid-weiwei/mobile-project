@@ -2,23 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 
 export default function GoalUsers() {
-  const [users, setUsers] = useState([]);  // Step 1: Define state variable
+  const [users, setUsers] = useState([]);  
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await fetch('https://jsonplaceholder.typicode.com/users');
-        const data = await response.json();  // Step 2: Parse response to JSON
-        setUsers(data);  // Set the users state with fetched data
+        const data = await response.json();  
+        setUsers(data); 
       } catch (error) {
         console.log("Error fetching users:", error);
       }
     };
 
-    fetchUsers();  // Call the async function inside useEffect
+    fetchUsers(); 
   }, []);
 
-  // Step 3: Render users using FlatList
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Users</Text>
@@ -53,6 +52,3 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
-
-
-

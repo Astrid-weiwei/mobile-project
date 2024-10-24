@@ -42,3 +42,47 @@ export async function deleteAllFromDB(collectionName) {
     console.log("delete all", err);
   }
 }
+// import {
+//   addDoc,
+//   collection,
+//   deleteDoc,
+//   doc,
+//   getDocs,
+//   setDoc,
+// } from "firebase/firestore";
+// import { database } from "./firebaseSetup";
+
+// // Function to write user data to a specific goal's subcollection "users"
+// export async function writeUsersToSubcollection(goalId, userData) {
+//   try {
+//     const goalRef = doc(database, "goals", goalId);  // Reference to the specific goal
+//     const usersCollectionRef = collection(goalRef, "users");  // Reference to the "users" subcollection
+    
+//     for (const user of userData) {
+//       await addDoc(usersCollectionRef, user);  // Add each user to the subcollection
+//     }
+//     console.log("Users added to subcollection");
+//   } catch (err) {
+//     console.log("Error adding users to subcollection: ", err);
+//   }
+// }
+
+// // Function to get all users from a specific goal's subcollection "users"
+// export async function getUsersFromSubcollection(goalId) {
+//   try {
+//     const goalRef = doc(database, "goals", goalId);
+//     const usersCollectionRef = collection(goalRef, "users");
+    
+//     const querySnapshot = await getDocs(usersCollectionRef);
+//     let usersArray = [];
+    
+//     querySnapshot.forEach((docSnapshot) => {
+//       usersArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
+//     });
+    
+//     return usersArray;
+//   } catch (err) {
+//     console.log("Error fetching users from subcollection: ", err);
+//     return [];
+//   }
+// }
