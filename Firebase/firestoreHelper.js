@@ -20,6 +20,7 @@ export async function writeToDB(data, collectionName) {
 export async function deleteFromDB(deleteId, collectionName) {
   try {
     await deleteDoc(doc(database, collectionName, deleteId));
+    deleteAllFromDB('goals/${deleteId}/users');
   } catch (err) {
     console.log("delete from db ", err);
   }
@@ -38,7 +39,21 @@ export async function deleteAllFromDB(collectionName) {
     querySnapshot.forEach((docSnapshot) => {
       deleteFromDB(docSnapshot.id, collectionName);
     });
+    
   } catch (err) {
     console.log("delete all", err);
+  }
+}
+
+export async function readAllDocs(collectionName) {
+  try {
+    const querySnapshot = await getDocs(collection(database, collectionName));
+    let newArray = [];
+    querySnapshot.forEach((docSnap) => {
+      newArray.push(docSnap.data());
+    });
+    return newArray;
+  } catch (err) {
+    console.log("read all docs ", err);
   }
 }
