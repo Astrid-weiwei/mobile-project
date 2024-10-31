@@ -34,4 +34,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#a4a",
     opacity: 0.2,
   },
-});P
+});
