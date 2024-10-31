@@ -1,6 +1,7 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
- 
+import { auth } from "../Firebase/firebaseSetup";
 
 export default function Signup({ navigation }) {
   const [email, setEmail] = useState("");
@@ -8,36 +9,38 @@ export default function Signup({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const loginHandler = () => {
+
     navigation.replace("Login");
   };
-  //const signupHandler = async () => {};
   const signupHandler = async () => {
     try {
+      if (password !== confirmPassword) {
+        Alert.alert("Password and confirm password should match");
+        return;
+      }
       if (
         email.length === 0 ||
         password.length === 0 ||
         confirmPassword.length === 0
       ) {
-        Alert.alert("Please fill all fields");
+        Alert.alert("No field should be empty");
         return;
       }
-      if (password !== confirmPassword) {
-        Alert.alert("Passwords do not match");
-        return;
-      }
-      //create a new user
       const userCred = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      console.log("User created", userCred.user);
+      console.log(userCred);
     } catch (err) {
-      console.log("Error in signup", err);
-      Alert.alert("Error in signup", err.message);
+      console.log("Sign up ", err.code);
+      // tell user if an error happens
+      if (err.code === "auth/weak-password") {
+        Alert.alert("Your password should be at least    6 characters");
+      }
+      Alert.alert(err.message);
     }
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Email</Text>
