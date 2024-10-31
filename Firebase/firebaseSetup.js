@@ -4,8 +4,10 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore } from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { initializeAuth , getReactNativePersistence} from 'firebase/auth'
-// // Your web app's Firebase configuration
+import { initializeAuth , getReactNativePersistence} from 'firebase/auth';
+
+
+// // // Your web app's Firebase configuration
 // const firebaseConfig = {
 //   apiKey: process.env.EXPO_PUBLIC_apiKey,
 //   authDomain: process.env.EXPO_PUBLIC_authDomain,

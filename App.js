@@ -6,7 +6,6 @@ import GoalDetails from "./components/GoalDetails";
 import { Button } from "react-native";
 import SignupScreen from "./components/SignupScreen";
 import LoginScreen from "./components/LoginScreen";
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -25,10 +24,8 @@ export default function App() {
             title: "All My Goals",
           }}
         />
-
-        <Stack.Screen name="Signup" component={SignupScreen} options={{ title: "Signup" }} />
-        <Stack.Screen name="Login" component={LoginScreen} options={{ title: "Login" }} />
-        
+         <Stack.Screen name="Signup" component={SignupScreen} options={{ title: "Signup" }} />
+         <Stack.Screen name="Login" component={LoginScreen} options={{ title: "Login" }} />
         <Stack.Screen
           name="Details"
           component={GoalDetails}
