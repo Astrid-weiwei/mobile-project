@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+ 
 
 export default function Signup({ navigation }) {
   const [email, setEmail] = useState("");
@@ -7,10 +8,36 @@ export default function Signup({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const loginHandler = () => {
-    // go to login
     navigation.replace("Login");
   };
-  const signupHandler = async () => {};
+  //const signupHandler = async () => {};
+  const signupHandler = async () => {
+    try {
+      if (
+        email.length === 0 ||
+        password.length === 0 ||
+        confirmPassword.length === 0
+      ) {
+        Alert.alert("Please fill all fields");
+        return;
+      }
+      if (password !== confirmPassword) {
+        Alert.alert("Passwords do not match");
+        return;
+      }
+      //create a new user
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("User created", userCred.user);
+    } catch (err) {
+      console.log("Error in signup", err);
+      Alert.alert("Error in signup", err.message);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Email</Text>
