@@ -1,104 +1,71 @@
-import {
-  Alert,
-  Button,
-  Modal,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Image,
-} from "react-native";
 import React, { useState } from "react";
+import { Button, Modal, StyleSheet, Text, TextInput, View, Image, Alert } from "react-native";
 import ImageManager from "./ImageManager";
 
-export default function Input({
-  textInputFocus,
-  inputHandler,
-  isModalVisible,
-  dismissModal,
-}) {
+export default function Input({ textInputFocus, inputHandler, modalVisible, dismissModal }) {
   const [text, setText] = useState("");
+  const [imageUri, setImageUri] = useState(null); // State to store the image URI
   const [blur, setBlur] = useState(false);
-  const [imageUri, setImageUri] = useState("");
   const minimumChar = 3;
-  function handleConfirm() {
-    // console.log(text);
-    inputHandler({ text, imageUri });
-    setText("");
+
+  // Function to handle text input
+  function updateText(changedText) {
+    setText(changedText);
   }
+
+  // Function to handle confirmation
+  function handleConfirm() {
+    if (text.length >= minimumChar) {
+      const newGoal = { text, imageUri }; // Pass both text and imageUri
+      inputHandler(newGoal); // Send object to Home.js
+      setText("");
+      setImageUri(null); // Reset the image URI
+    } else {
+      Alert.alert("Error", "Please enter more text.");
+    }
+  }
+
+  // Function to receive the image URI from ImageManager
+  function handleImageUri(uri) {
+    setImageUri(uri);
+  }
+
+  // Handle cancellation
   function handleCancel() {
-    // hide the modal
-    Alert.alert("Cancel", "Are you sure you want to cancel", [
-      { text: "cancel", style: "cancel" },
+    Alert.alert("Cancel", "Are you sure you want to cancel?", [
+      { text: "Cancel", style: "cancel" },
       {
-        text: "ok",
+        text: "OK",
         onPress: () => {
           setText("");
+          setImageUri(null);
           dismissModal();
         },
       },
     ]);
   }
-  function receiveImageUri(uri) {
-    console.log("In Input ", uri);
-    setImageUri(uri);
-  }
+
   return (
-    <Modal animationType="slide" visible={isModalVisible} transparent={true}>
+    <Modal animationType="slide" visible={modalVisible} transparent={true}>
       <View style={styles.container}>
         <View style={styles.modalContainer}>
-          <Image
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/2617/2617812.png",
-            }}
-            style={styles.image}
-            alt="Image of a an arrow"
-          />
-          <Image
-            source={require("../assets/goal.png")}
-            style={styles.image}
-            alt="Image of a an arrow"
-          />
-
           <TextInput
             autoFocus={textInputFocus}
             placeholder="Type something"
-            autoCorrect={true}
-            keyboardType="default"
-            value={text}
             style={styles.input}
-            onChangeText={(changedText) => {
-              setText(changedText);
-            }}
-            onBlur={() => {
-              setBlur(true);
-            }}
-            onFocus={() => {
-              setBlur(false);
-            }}
+            value={text}
+            onChangeText={updateText}
+            onBlur={() => setBlur(true)}
+            onFocus={() => setBlur(false)}
           />
-
-          {blur ? (
-            text.length >= minimumChar ? (
-              <Text>Thank you</Text>
-            ) : (
-              <Text>Please type more than {minimumChar} characters</Text>
-            )
-          ) : (
-            text && <Text>{text.length}</Text>
+          {blur && text.length < minimumChar && (
+            <Text>Please type more than {minimumChar} characters</Text>
           )}
-          <ImageManager receiveImageUri={receiveImageUri} />
+          <ImageManager receiveImageUri={handleImageUri} /> {/* Pass the handler function to ImageManager */}
+          {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
           <View style={styles.buttonsRow}>
-            <View style={styles.buttonContainer}>
-              <Button title="Cancel" onPress={handleCancel} />
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button
-                disabled={text.length < minimumChar}
-                title="Confirm"
-                onPress={handleConfirm}
-              />
-            </View>
+            <Button title="Cancel" onPress={handleCancel} />
+            <Button title="Confirm" onPress={handleConfirm} disabled={text.length < minimumChar} />
           </View>
         </View>
       </View>
@@ -109,25 +76,30 @@ export default function Input({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
+  },
+  modalContainer: {
+    backgroundColor: "#aaa",
+    borderRadius: 5,
+    alignItems: "center",
+    padding: 20,
   },
   input: {
     borderColor: "purple",
     borderWidth: 2,
     padding: 5,
+    color: "blue",
+    marginVertical: 5,
+  },
+  buttonsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  imagePreview: {
+    width: 100,
+    height: 100,
     marginVertical: 10,
   },
-  modalContainer: {
-    borderRadius: 6,
-    backgroundColor: "#999",
-    alignItems: "center",
-  },
-  buttonContainer: {
-    width: "30%",
-    margin: 10,
-  },
-  buttonsRow: { flexDirection: "row" },
-  image: { width: 100, height: 100 },
 });
