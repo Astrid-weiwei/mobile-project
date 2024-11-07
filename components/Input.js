@@ -1,98 +1,71 @@
-import {
-  Button,
-  Modal,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Image,
-  Alert,
-} from "react-native";
 import React, { useState } from "react";
+import { Button, Modal, StyleSheet, Text, TextInput, View, Image, Alert } from "react-native";
+import ImageManager from "./ImageManager";
 
-export default function Input({
-  textInputFocus,
-  inputHandler,
-  modalVisible,
-  dismissModal,
-}) {
+export default function Input({ textInputFocus, inputHandler, modalVisible, dismissModal }) {
   const [text, setText] = useState("");
+  const [imageUri, setImageUri] = useState(null); // State to store the image URI
   const [blur, setBlur] = useState(false);
   const minimumChar = 3;
 
+  // Function to handle text input
   function updateText(changedText) {
     setText(changedText);
   }
+
+  // Function to handle confirmation
   function handleConfirm() {
-    // call the callback fn received from App.js
-    // pass what user has typed
-    inputHandler(text);
-    setText("");
+    if (text.length >= minimumChar) {
+      const newGoal = { text, imageUri }; // Pass both text and imageUri
+      inputHandler(newGoal); // Send object to Home.js
+      setText("");
+      setImageUri(null); // Reset the image URI
+    } else {
+      Alert.alert("Error", "Please enter more text.");
+    }
   }
+
+  // Function to receive the image URI from ImageManager
+  function handleImageUri(uri) {
+    setImageUri(uri);
+  }
+
+  // Handle cancellation
   function handleCancel() {
-    // hide the modal
-    Alert.alert("Cancel", "Are you sure you want to cancel", [
-      { text: "cancel", style: "cancel" },
+    Alert.alert("Cancel", "Are you sure you want to cancel?", [
+      { text: "Cancel", style: "cancel" },
       {
-        text: "ok",
+        text: "OK",
         onPress: () => {
           setText("");
+          setImageUri(null);
           dismissModal();
         },
       },
     ]);
   }
+
   return (
     <Modal animationType="slide" visible={modalVisible} transparent={true}>
       <View style={styles.container}>
         <View style={styles.modalContainer}>
-          <Image
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/2617/2617812.png",
-            }}
-            style={styles.image}
-            alt="Image of a an arrow"
-          />
-          <Image
-            source={require("../assets/goal.png")}
-            style={styles.image}
-            alt="Image of a an arrow"
-          />
-
           <TextInput
             autoFocus={textInputFocus}
             placeholder="Type something"
-            keyboardType="default"
             style={styles.input}
             value={text}
             onChangeText={updateText}
-            onBlur={() => {
-              setBlur(true);
-            }}
-            onFocus={() => {
-              setBlur(false);
-            }}
+            onBlur={() => setBlur(true)}
+            onFocus={() => setBlur(false)}
           />
-          {blur ? (
-            text.length >= minimumChar ? (
-              <Text>Thank you</Text>
-            ) : (
-              <Text>Please type more than {minimumChar} characters</Text>
-            )
-          ) : (
-            text && <Text>{text.length}</Text>
+          {blur && text.length < minimumChar && (
+            <Text>Please type more than {minimumChar} characters</Text>
           )}
+          <ImageManager receiveImageUri={handleImageUri} /> {/* Pass the handler function to ImageManager */}
+          {imageUri && <Image source={{ uri: imageUri }} style={styles.imagePreview} />}
           <View style={styles.buttonsRow}>
-            <View style={styles.buttonContainer}>
-              <Button title="Cancel" onPress={handleCancel} />
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button
-                disabled={text.length < minimumChar}
-                title="Confirm"
-                onPress={handleConfirm}
-              />
-            </View>
+            <Button title="Cancel" onPress={handleCancel} />
+            <Button title="Confirm" onPress={handleConfirm} disabled={text.length < minimumChar} />
           </View>
         </View>
       </View>
@@ -103,7 +76,6 @@ export default function Input({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     alignItems: "center",
     justifyContent: "center",
   },
@@ -111,6 +83,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#aaa",
     borderRadius: 5,
     alignItems: "center",
+    padding: 20,
   },
   input: {
     borderColor: "purple",
@@ -119,11 +92,14 @@ const styles = StyleSheet.create({
     color: "blue",
     marginVertical: 5,
   },
-  buttonContainer: {
-    width: "30%",
-    margin: 10,
+  buttonsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
-  buttonsRow: { flexDirection: "row" },
-
-  image: { width: 100, height: 100 },
+  imagePreview: {
+    width: 100,
+    height: 100,
+    marginVertical: 10,
+  },
 });

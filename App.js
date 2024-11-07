@@ -29,7 +29,6 @@ const AppStack = (
         return {
           title: "All My Goals",
           headerRight: () => {
-            // render a button icon to navigate to Profile
             return (
               <PressableButton
                 pressedFunction={() => {

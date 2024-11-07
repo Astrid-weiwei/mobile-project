@@ -9,35 +9,37 @@ export default function Signup({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const loginHandler = () => {
-
+    //take user to login
     navigation.replace("Login");
   };
   const signupHandler = async () => {
+    // do some validation:
+    //1. email, password and confirmpassword are not empty
+    //2.
+    //create a new user using createUserWithEmailAndPassword
     try {
-      if (password !== confirmPassword) {
-        Alert.alert("Password and confirm password should match");
-        return;
-      }
       if (
         email.length === 0 ||
         password.length === 0 ||
         confirmPassword.length === 0
       ) {
-        Alert.alert("No field should be empty");
+        Alert.alert("All fields should be provided");
         return;
       }
+      if (password !== confirmPassword) {
+        Alert.alert("password and confirm password don't match");
+        return;
+      }
+      // any other check you could do to make sure we have valid data
+      //e.g. regex for email, password length,...
       const userCred = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      console.log(userCred);
+      console.log(userCred.user);
     } catch (err) {
-      console.log("Sign up ", err.code);
-      // tell user if an error happens
-      if (err.code === "auth/weak-password") {
-        Alert.alert("Your password should be at least    6 characters");
-      }
+      console.log("sign up ", err);
       Alert.alert(err.message);
     }
   };
