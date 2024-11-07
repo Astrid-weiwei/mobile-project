@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Modal,
   StyleSheet,
@@ -6,27 +7,23 @@ import {
   TextInput,
   View,
   Image,
-  Alert,
 } from "react-native";
 import React, { useState } from "react";
+import ImageManager from "./ImageManager";
 
 export default function Input({
   textInputFocus,
   inputHandler,
-  modalVisible,
+  isModalVisible,
   dismissModal,
 }) {
   const [text, setText] = useState("");
   const [blur, setBlur] = useState(false);
+  const [imageUri, setImageUri] = useState("");
   const minimumChar = 3;
-
-  function updateText(changedText) {
-    setText(changedText);
-  }
   function handleConfirm() {
-    // call the callback fn received from App.js
-    // pass what user has typed
-    inputHandler(text);
+    // console.log(text);
+    inputHandler({ text, imageUri });
     setText("");
   }
   function handleCancel() {
@@ -42,8 +39,12 @@ export default function Input({
       },
     ]);
   }
+  function receiveImageUri(uri) {
+    console.log("In Input ", uri);
+    setImageUri(uri);
+  }
   return (
-    <Modal animationType="slide" visible={modalVisible} transparent={true}>
+    <Modal animationType="slide" visible={isModalVisible} transparent={true}>
       <View style={styles.container}>
         <View style={styles.modalContainer}>
           <Image
@@ -62,10 +63,13 @@ export default function Input({
           <TextInput
             autoFocus={textInputFocus}
             placeholder="Type something"
+            autoCorrect={true}
             keyboardType="default"
-            style={styles.input}
             value={text}
-            onChangeText={updateText}
+            style={styles.input}
+            onChangeText={(changedText) => {
+              setText(changedText);
+            }}
             onBlur={() => {
               setBlur(true);
             }}
@@ -73,6 +77,7 @@ export default function Input({
               setBlur(false);
             }}
           />
+
           {blur ? (
             text.length >= minimumChar ? (
               <Text>Thank you</Text>
@@ -82,6 +87,7 @@ export default function Input({
           ) : (
             text && <Text>{text.length}</Text>
           )}
+          <ImageManager receiveImageUri={receiveImageUri} />
           <View style={styles.buttonsRow}>
             <View style={styles.buttonContainer}>
               <Button title="Cancel" onPress={handleCancel} />
@@ -103,27 +109,25 @@ export default function Input({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    // backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-  },
-  modalContainer: {
-    backgroundColor: "#aaa",
-    borderRadius: 5,
-    alignItems: "center",
   },
   input: {
     borderColor: "purple",
     borderWidth: 2,
     padding: 5,
-    color: "blue",
-    marginVertical: 5,
+    marginVertical: 10,
+  },
+  modalContainer: {
+    borderRadius: 6,
+    backgroundColor: "#999",
+    alignItems: "center",
   },
   buttonContainer: {
     width: "30%",
     margin: 10,
   },
   buttonsRow: { flexDirection: "row" },
-
   image: { width: 100, height: 100 },
 });
