@@ -13,13 +13,14 @@ import { useEffect, useState } from "react";
 import Input from "./Input";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
-import { database } from "../Firebase/firebaseSetup";
+import { auth, database } from "../Firebase/firebaseSetup";
 import {
   deleteAllFromDB,
   deleteFromDB,
   writeToDB,
 } from "../Firebase/firestoreHelper";
 import { collection, onSnapshot } from "firebase/firestore";
+
 
 export default function Home({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -51,6 +52,11 @@ export default function Home({ navigation }) {
     console.log("App ", data);
     // declare a JS object
     let newGoal = { text: data };
+    // add condition
+    newGoal = { ...newGoal, owner: auth.currentUser.uid };
+
+
+
     // add the newGoal to db
     //call writeToDB
     writeToDB(newGoal, collectionName);
@@ -73,6 +79,7 @@ export default function Home({ navigation }) {
   //   console.log("goal pressed");
   //   navigation.navigate("Details", { goalObj: pressedGoal });
   // }
+
   function goalDeleteHandler(deletedId) {
     console.log("goal deleted ", deletedId);
     //Use array.filter to update the array by removing the deletedId
