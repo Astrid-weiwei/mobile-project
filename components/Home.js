@@ -20,6 +20,9 @@ import {
   writeToDB,
 } from "../Firebase/firestoreHelper";
 import { collection, onSnapshot } from "firebase/firestore";
+import { where } from "firebase/firestore";
+import { firestore } from "../Firebase/firebaseSetup";
+
 
 
 export default function Home({ navigation }) {
@@ -29,7 +32,8 @@ export default function Home({ navigation }) {
   const collectionName = "goals";
   useEffect(() => {
     //querySnapshot is a list/array of documentSnapshots
-    const unsubscribe = onSnapshot(
+    const unsubscribe = onSnapshot(query(collection(firestore, "goals")),
+      where ("owner", "==", auth.currentUser.uid),  
       collection(database, collectionName),
       (querySnapshot) => {
         //define an array
