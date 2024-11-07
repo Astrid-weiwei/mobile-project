@@ -5,7 +5,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth, database, storage } from "../Firebase/firebaseSetup";
 import GoalItem from "./GoalItem";
 
-export default function Home() {
+export default function Home( {navigation} ) {
   const [goals, setGoals] = useState([]);
 
   useEffect(() => {
@@ -17,7 +17,19 @@ export default function Home() {
     });
     return () => unsubscribe();
   }, []);
-
+  async function handleImageData(url) {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const imageName = url.substring(url.lastIndexOf("/") + 1);
+      const imageRef = ref(storage, `images/${imageName}`);
+      const uploadResult = await uploadBytesResumable(imageRef, blob);
+      const imageDownloadURL = await getDownloadURL(uploadResult.ref);
+      return imageDownloadURL;
+    } catch (error) {
+      console.error("Error saving image:", error);
+    }
+  }
   async function inputHandler(newGoal) {
     try {
       let imageDownloadURL = null;
