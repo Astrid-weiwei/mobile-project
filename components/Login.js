@@ -7,17 +7,16 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const signupHandler = () => {
-    //take user to sign up
+    // go to signup
     navigation.replace("Signup");
   };
   const loginHandler = async () => {
-    // log user in with signInWithEmailAndPassword
-    // data validation
-    if (email.length === 0 || password.length === 0) {
-      Alert.alert("All fields should be provided");
-      return;
-    }
+    // data validation?
     try {
+      if (email.length === 0 || password.length === 0) {
+        Alert.alert("No field should be empty");
+        return;
+      }
       const userCred = await signInWithEmailAndPassword(auth, email, password);
       console.log(userCred.user);
     } catch (err) {

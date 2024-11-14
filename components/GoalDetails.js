@@ -1,56 +1,82 @@
+import { Button, Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import PressableButton from "./PressableButton";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { updateDB } from "../Firebase/firestoreHelper";
+import GoalUsers from "./GoalUsers";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../Firebase/firebaseSetup";
 
-export default function GoalDetails({ goal }) {
-  const [imageDownloadURL, setImageDownloadURL] = useState(null);
-
+export default function GoalDetails({ navigation, route }) {
+  const [warning, setWarning] = useState(false);
+  const [imageUri, setImageUri] = useState("");
+  function warningHandler() {
+    setWarning(true);
+    navigation.setOptions({ title: "Warning!" });
+    updateDB(route.params.goalData.id, { warning: true }, "goals");
+  }
   useEffect(() => {
-    async function fetchImageURL() {
-      if (goal.imageUri) {
-        try {
-          // Create a reference to the image in Firebase Storage
-          const imageRef = ref(storage, goal.imageUri);
-          
-          // Get the download URL for the image
-          const url = await getDownloadURL(imageRef);
-          setImageDownloadURL(url);
-        } catch (error) {
-          console.error("Error fetching image URL:", error);
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          // <Button title="Warning" color="white" onPress={warningHandler} />
+          <PressableButton
+            pressedHandler={warningHandler}
+            componentStyle={{ backgroundColor: "purple" }}
+            pressedStyle={{ opacity: 0.5, backgroundColor: "purple" }}
+          >
+            <AntDesign name="warning" size={24} color="white" />
+          </PressableButton>
+        );
+      },
+    });
+  }, []);
+  useEffect(() => {
+    async function getImageUri() {
+      try {
+        if (route.params.goalData.imageUri) {
+          const imageRef = ref(storage, route.params.goalData.imageUri);
+          const httpsImageURi = await getDownloadURL(imageRef);
+          setImageUri(httpsImageURi);
         }
+      } catch (err) {
+        console.log("get image ", err);
       }
     }
-
-    fetchImageURL();
-  }, [goal.imageUri]);
+    getImageUri();
+  }, []);
+  function moreDetailsHandler() {
+    navigation.push("Details");
+  }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{goal.text}</Text>
-      
-      {/* Display the image if the download URL is available */}
-      {imageDownloadURL && (
-        <Image source={{ uri: imageDownloadURL }} style={styles.image} />
+    <View>
+      {route.params ? (
+        <Text style={warning && styles.warningStyle}>
+          This is details of a goal with text {route.params.goalData.text} and
+          id {route.params.goalData.id}
+        </Text>
+      ) : (
+        <Text style={warning && styles.warningStyle}>More details</Text>
+      )}
+      <Button title="More Details" onPress={moreDetailsHandler} />
+      <GoalUsers id={route.params.goalData.id} />
+      {imageUri && (
+        <Image
+          source={{
+            uri: imageUri,
+          }}
+          style={styles.image}
+          alt="Image of the goal"
+        />
       )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    alignItems: "center",
+  warningStyle: {
+    color: "red",
   },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  image: {
-    width: 200,
-    height: 200,
-    marginTop: 10,
-    borderRadius: 10,
-  },
+  image: { width: 100, height: 100 },
 });

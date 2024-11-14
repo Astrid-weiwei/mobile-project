@@ -12,11 +12,13 @@ import Profile from "./components/Profile";
 import PressableButton from "./components/PressableButton";
 const Stack = createNativeStackNavigator();
 import AntDesign from "@expo/vector-icons/AntDesign";
+import Map from "./components/Map";
 
 const AuthStack = (
   <>
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="Signup" component={Signup} />
+    
   </>
 );
 

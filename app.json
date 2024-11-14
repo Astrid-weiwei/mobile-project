@@ -1,5 +1,10 @@
 {
   "expo": {
+    "permissions": [
+      "ACCESS_COARSE_LOCATION",
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_BACKGROUND_LOCATION"
+    ],
     "name": "Fall2024",
     "slug": "Fall2024",
     "version": "1.0.0",
@@ -27,7 +32,7 @@
       [
         "expo-image-picker",
         {
-          "cameraPermission": "The app accesses your camera to let you take a picture and share them with your friends."
+          "cameraPermission": "The app accesses your camera to let you take a pic for each goal."
         }
       ]
     ]
