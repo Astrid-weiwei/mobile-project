@@ -27,7 +27,7 @@
       [
         "expo-image-picker",
         {
-          "cameraPermission": "The app accesses your camera to let you take a picture and share them with your friends."
+          "cameraPermission": "The app accesses your camera to let you take a pic for each goal."
         }
       ]
     ]

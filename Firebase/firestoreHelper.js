@@ -20,7 +20,8 @@ export async function writeToDB(data, collectionName) {
 export async function deleteFromDB(deleteId, collectionName) {
   try {
     await deleteDoc(doc(database, collectionName, deleteId));
-    deleteAllFromDB('goals/${deleteId}/users');
+    //we have also delete all docs in a the users subcollection
+    deleteAllFromDB(`goals/${deleteId}/users`);
   } catch (err) {
     console.log("delete from db ", err);
   }
@@ -39,7 +40,7 @@ export async function deleteAllFromDB(collectionName) {
     querySnapshot.forEach((docSnapshot) => {
       deleteFromDB(docSnapshot.id, collectionName);
     });
-    
+    //delete all docs in users subcollection
   } catch (err) {
     console.log("delete all", err);
   }
