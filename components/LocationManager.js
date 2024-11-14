@@ -5,17 +5,31 @@ import * as Location from 'expo-location';
 
 const LocationManager = () => {
   const [location, setLocation] = useState(null);
+  const [response, requestPermission] = Location.useForegroundPermissions();
 
+  // Function to check and request permission if not granted
+  const verifyPermission = async () => {
+    if (response?.granted) {
+      return true; // Permission is already granted
+    }
+
+    // Request permission if not granted
+    const permissionResponse = await requestPermission();
+    return permissionResponse.granted;
+  };
+
+  // Handler to locate user
   const locateUserHandler = async () => {
-    try {
-      // Request permission to access location
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Permission denied', 'Allow location access in settings to use this feature.');
-        return;
-      }
+    const hasPermission = await verifyPermission();
+    if (!hasPermission) {
+      Alert.alert(
+        'Permission Required',
+        'Location permission is required to use this feature. Please grant permission in settings.'
+      );
+      return;
+    }
 
-      // Get current location
+    try {
       const location = await Location.getCurrentPositionAsync();
       setLocation(location);
     } catch (err) {
