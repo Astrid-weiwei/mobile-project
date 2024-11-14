@@ -5,7 +5,7 @@ import PressableButton from "./PressableButton";
 import { updateDB } from "../Firebase/firestoreHelper";
 import GoalUsers from "./GoalUsers";
 import { getDownloadURL, ref } from "firebase/storage";
-import { storage } from "../Firebase/firebaseConfig"; // Ensure correct path
+import { storage } from "../Firebase/firebaseSetup"; // Ensure correct path
 
 export default function GoalDetails({ navigation, route }) {
   const [warning, setWarning] = useState(false);
