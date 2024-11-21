@@ -3,24 +3,11 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   setDoc,
 } from "firebase/firestore";
 import { database } from "./firebaseSetup";
-
-export async function saveUserLocation(uid, location) {
-  try {
-    await setDoc(
-      doc(database, "users", uid),
-      { location },
-      { merge: true } // Ensures existing fields are not overwritten
-    );
-    console.log("User location saved successfully!");
-  } catch (err) {
-    console.log("Error saving user location:", err);
-  }
-}
-
 
 export async function writeToDB(data, collectionName) {
   try {
@@ -73,16 +60,14 @@ export async function readAllDocs(collectionName) {
   }
 }
 
-export async function getUserLocation(uid) {
+export async function readOneDoc(id, collectionName) {
   try {
-    const userDoc = await getDoc(doc(database, "users", uid));
-    if (userDoc.exists()) {
-      return userDoc.data().location; // Return location info
-    } else {
-      console.log("No such document!");
-      return null;
+    const docSnapshot = await getDoc(doc(database, collectionName, id));
+    if (docSnapshot.exists()) {
+      return docSnapshot.data();
     }
+    return null;
   } catch (err) {
-    console.log("Error fetching user location:", err);
+    console.log("read one doc ", err);
   }
 }
