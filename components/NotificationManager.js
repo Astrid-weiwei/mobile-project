@@ -3,24 +3,22 @@ import { View, Button, StyleSheet, Alert } from 'react-native';
 import * as Notifications from 'expo-notifications';
 
 const NotificationManager = () => {
-  // Function to verify notification permissions
   const verifyPermission = async () => {
     try {
       const permissionStatus = await Notifications.getPermissionsAsync();
       if (permissionStatus.granted) {
-        return true; // Permission is already granted
+        return true; 
       }
 
-      // Request permissions if not granted
       const requestStatus = await Notifications.requestPermissionsAsync();
-      return requestStatus.granted; // Return whether the user granted permissions
+      return requestStatus.granted; 
     } catch (err) {
       console.error("Error checking permissions:", err);
-      return false; // In case of an error, assume permission not granted
+      return false;
     }
   };
 
-  // Function to schedule a notification
+  
   const scheduleNotificationHandler = async () => {
     const hasPermission = await verifyPermission();
     if (!hasPermission) {
@@ -39,7 +37,7 @@ const NotificationManager = () => {
           data: { extraData: "Some additional data" },
         },
         trigger: {
-          seconds: 10, // Notification will be triggered 10 seconds from now
+          seconds: 10,
         },
       });
       Alert.alert("Success", `Notification scheduled with ID: ${notificationId}`);
