@@ -85,12 +85,10 @@ export default function App() {
     // Add a listener for received notifications
     const subscription = Notifications.addNotificationReceivedListener((notification) => {
       console.log("Notification Received:", notification);
-      // You can add custom logic here, such as updating state or showing an alert
+      
     });
-
-    // Cleanup listener on component unmount
     return () => subscription.remove();
-    
+
   }, []);
 
   return (
