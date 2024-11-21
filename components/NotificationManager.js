@@ -3,7 +3,34 @@ import { View, Button, StyleSheet, Alert } from 'react-native';
 import * as Notifications from 'expo-notifications';
 
 const NotificationManager = () => {
+  // Function to verify notification permissions
+  const verifyPermission = async () => {
+    try {
+      const permissionStatus = await Notifications.getPermissionsAsync();
+      if (permissionStatus.granted) {
+        return true; // Permission is already granted
+      }
+
+      // Request permissions if not granted
+      const requestStatus = await Notifications.requestPermissionsAsync();
+      return requestStatus.granted; // Return whether the user granted permissions
+    } catch (err) {
+      console.error("Error checking permissions:", err);
+      return false; // In case of an error, assume permission not granted
+    }
+  };
+
+  // Function to schedule a notification
   const scheduleNotificationHandler = async () => {
+    const hasPermission = await verifyPermission();
+    if (!hasPermission) {
+      Alert.alert(
+        "Permission Required",
+        "Notifications permission is required to set reminders."
+      );
+      return;
+    }
+
     try {
       const notificationId = await Notifications.scheduleNotificationAsync({
         content: {
