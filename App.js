@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator();
 Notifications.setNotificationHandler({
   handleNotification: async () => {
     return {
-      shouldShowAlert: true, // Show the notification as an alert
+      shouldShowAlert: true, 
       shouldPlaySound: true, // Play a sound when the notification is triggered
       shouldSetBadge: true, // Update the app badge (iOS only)
     };
@@ -81,6 +81,16 @@ export default function App() {
       // Update state based on user's login status
       setIsUserLoggedIn(!!user);
     });
+
+    // Add a listener for received notifications
+    const subscription = Notifications.addNotificationReceivedListener((notification) => {
+      console.log("Notification Received:", notification);
+      // You can add custom logic here, such as updating state or showing an alert
+    });
+
+    // Cleanup listener on component unmount
+    return () => subscription.remove();
+    
   }, []);
 
   return (
