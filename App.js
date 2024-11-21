@@ -10,15 +10,27 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./Firebase/firebaseSetup";
 import Profile from "./components/Profile";
 import PressableButton from "./components/PressableButton";
-const Stack = createNativeStackNavigator();
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Map from "./components/Map";
+import * as Notifications from "expo-notifications";
+
+const Stack = createNativeStackNavigator();
+
+// Set up notification handler outside the App function
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true, 
+      shouldPlaySound: true, // Play a sound when the notification is triggered
+      shouldSetBadge: true, // Update the app badge (iOS only)
+    };
+  },
+});
 
 const AuthStack = (
   <>
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="Signup" component={Signup} />
-    
   </>
 );
 
@@ -51,37 +63,34 @@ const AppStack = (
       options={({ navigation, route }) => {
         return {
           title: route.params ? route.params.goalObj.text : "More Details",
-          // headerRight: () => {
-          //   return (
-          //     <Button
-          //       title="Warning"
-          //       onPress={() => {
-          //         console.log("warning");
-          //       }}
-          //     />
-          //   );
-          // },
         };
       }}
     />
     <Stack.Screen name="Profile" component={Profile} />
+    <Stack.Screen name="Map" component={Map} />
   </>
 );
+
 export default function App() {
-  const [isUserLoggedIn, SetIsUserLoggedIn] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+
   useEffect(() => {
-    //set up auth listener
+    // Set up auth listener
     onAuthStateChanged(auth, (user) => {
       console.log(user);
-      // if user is not logged in we receive null
-      // else we receive user data
-      if (user) {
-        SetIsUserLoggedIn(true);
-      } else {
-        SetIsUserLoggedIn(false);
-      }
+      // Update state based on user's login status
+      setIsUserLoggedIn(!!user);
     });
+
+    // Add a listener for received notifications
+    const subscription = Notifications.addNotificationReceivedListener((notification) => {
+      console.log("Notification Received:", notification);
+      
+    });
+    return () => subscription.remove();
+
   }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -92,7 +101,7 @@ export default function App() {
         }}
       >
         {
-          // if user is not logged in show them AuthStack else show them AppStack
+          // Show AuthStack if user is not logged in, else show AppStack
           isUserLoggedIn ? AppStack : AuthStack
         }
       </Stack.Navigator>

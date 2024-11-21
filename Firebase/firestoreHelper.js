@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   setDoc,
 } from "firebase/firestore";
@@ -56,5 +57,17 @@ export async function readAllDocs(collectionName) {
     return newArray;
   } catch (err) {
     console.log("read all docs ", err);
+  }
+}
+
+export async function readOneDoc(id, collectionName) {
+  try {
+    const docSnapshot = await getDoc(doc(database, collectionName, id));
+    if (docSnapshot.exists()) {
+      return docSnapshot.data();
+    }
+    return null;
+  } catch (err) {
+    console.log("read one doc ", err);
   }
 }
